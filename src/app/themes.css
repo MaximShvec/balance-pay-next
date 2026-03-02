@@ -1,0 +1,37 @@
+/* Theme settings matching shadcn-ui-kit-dashboard (Default preset) */
+
+/* Radius - default uses base --radius: 0.5rem from globals */
+[data-theme-radius="none"] {
+  --radius: 0rem;
+}
+
+[data-theme-radius="sm"] {
+  --radius: 0.3rem;
+}
+
+[data-theme-radius="md"] {
+  --radius: 0.5rem;
+}
+
+[data-theme-radius="lg"] {
+  --radius: 1rem;
+}
+
+[data-theme-radius="xl"] {
+  --radius: 1.5rem;
+}
+
+/* Scale - "none" uses default, no override */
+[data-theme-scale="sm"] {
+  --text-lg: 1.05rem;
+  --text-base: 0.85rem;
+  --text-sm: 0.75rem;
+  --spacing: 0.222222rem;
+}
+
+[data-theme-scale="lg"] {
+  --text-lg: 1.55rem;
+  --text-base: 1.35rem;
+  --text-sm: 1rem;
+  --spacing: 0.262222rem;
+}
