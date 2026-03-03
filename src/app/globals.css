@@ -95,18 +95,27 @@
   --chart-3: var(--base-800);
   --chart-4: var(--base-400);
   --chart-5: var(--base-300);
-  --sidebar: var(--base-100);
+  --sidebar: var(--color-white);
   --sidebar-foreground: var(--base-500);
   --sidebar-primary: var(--base-950);
   --sidebar-primary-foreground: var(--color-white);
-  --sidebar-accent: var(--base-200);
+  --sidebar-accent: #F3F4F6;
   --sidebar-accent-foreground: var(--base-950);
   --sidebar-border: var(--base-200);
   --sidebar-ring: var(--base-800);
+
+  /* Высота шапки: 80px desktop, 56px mobile */
+  --header-height: calc(var(--spacing) * 20);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --header-height: calc(var(--spacing) * 16);
+  }
 }
 
 .dark {
-  --background: var(--base-950);
+  --background: var(--color-black);
   --foreground: var(--base-200);
   --card: var(--base-950);
   --card-foreground: var(--base-200);
@@ -129,7 +138,7 @@
   --chart-3: var(--base-200);
   --chart-4: var(--base-600);
   --chart-5: var(--base-700);
-  --sidebar: var(--base-900);
+  --sidebar: var(--color-black);
   --sidebar-foreground: var(--base-200);
   --sidebar-primary: var(--base-50);
   --sidebar-primary-foreground: var(--base-900);
@@ -142,6 +151,9 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  *:focus {
+    outline: none;
   }
   body {
     @apply bg-background text-foreground;

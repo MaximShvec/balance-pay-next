@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Bell, CreditCard, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 import {
   UserIcon,
@@ -20,11 +20,17 @@ import {
 export default function UserMenu() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="cursor-pointer" asChild>
-        <Avatar>
-          <AvatarImage src={`/images/avatars/01.png`} alt="User avatar" />
-          <AvatarFallback className="rounded-lg">TB</AvatarFallback>
-        </Avatar>
+      <DropdownMenuTrigger
+        className="cursor-pointer transition-all duration-200"
+        asChild
+      >
+        <button
+          type="button"
+          className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted/50 hover:bg-muted"
+          aria-label="User menu"
+        >
+          <UserIcon className="size-5 text-muted-foreground" />
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-(--radix-dropdown-menu-trigger-width) min-w-60"

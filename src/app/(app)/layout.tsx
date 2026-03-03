@@ -1,27 +1,27 @@
-import React from "react"
-import { cookies } from "next/headers"
+import React from "react";
+import { cookies } from "next/headers";
 
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/layout/sidebar/app-sidebar"
-import { SiteHeader } from "@/components/layout/header"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/sidebar/app-sidebar";
+import { SiteHeader } from "@/components/layout/header";
+import { HeaderProvider } from "@/components/layout/header/header-context";
 
 export default async function AppLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies()
+  const cookieStore = await cookies();
   const defaultOpen =
     cookieStore.get("sidebar_state")?.value === "true" ||
-    cookieStore.get("sidebar_state") === undefined
+    cookieStore.get("sidebar_state") === undefined;
 
   return (
     <SidebarProvider
       defaultOpen={defaultOpen}
       style={
         {
-          "--sidebar-width": "calc(var(--spacing) * 64)",
-          "--header-height": "calc(var(--spacing) * 14)",
+          "--sidebar-width": "calc(var(--spacing) * 72)",
           "--content-padding": "calc(var(--spacing) * 4)",
           "--content-margin": "calc(var(--spacing) * 1.5)",
           "--content-full-height":
@@ -31,13 +31,15 @@ export default async function AppLayout({
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader />
-        <div className="bg-muted/40 flex flex-1 flex-col">
-          <div className="@container/main p-4 xl:group-data-[theme-content-layout=centered]/layout:container xl:group-data-[theme-content-layout=centered]/layout:mx-auto">
-            {children}
+        <HeaderProvider>
+          <SiteHeader />
+          <div className="flex flex-1 flex-col">
+            <div className="@container/main p-4 xl:group-data-[theme-content-layout=centered]/layout:container xl:group-data-[theme-content-layout=centered]/layout:mx-auto">
+              {children}
+            </div>
           </div>
-        </div>
+        </HeaderProvider>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

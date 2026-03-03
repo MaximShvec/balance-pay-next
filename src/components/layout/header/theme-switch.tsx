@@ -20,9 +20,9 @@ export default function ThemeSwitch() {
 
   return (
     <Button
-      size="icon-sm"
+      size="icon"
       variant="ghost"
-      className="relative transition-all duration-200 cursor-pointer"
+      className="relative size-9 rounded-full bg-muted/50 hover:bg-muted transition-all duration-200 cursor-pointer"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
     >
       {theme === "light" ? <MoonIcon /> : <SunIcon />}

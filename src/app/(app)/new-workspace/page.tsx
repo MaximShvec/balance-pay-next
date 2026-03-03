@@ -18,7 +18,6 @@ export default function NewWorkspacePage() {
     <div className="flex h-[calc(100vh-var(--header-height)-3rem)] flex-col items-center justify-center">
       <div className="mx-auto max-w-md text-center">
         <header className="space-y-2">
-          <h2 className="text-2xl font-bold">New workspace</h2>
           <p className="text-muted-foreground">
             Start by selecting a template or begin with a blank canvas.
           </p>

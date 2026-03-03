@@ -31,8 +31,7 @@ export default async function Page() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight">Products</h1>
+      <div className="flex items-center justify-end space-y-2">
         <Button asChild>
           <Link href="/dashboard/pages/products/create">
             <PlusIcon /> Add Product
