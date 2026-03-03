@@ -1,5 +1,11 @@
-import { BadgeCheck, Bell, CreditCard, LogOut } from "lucide-react";
+import Link from "next/link";
+import { Bell, CreditCard, LogOut } from "lucide-react";
 
+import {
+  UserIcon,
+  TransactionsLinearIcon,
+  ForwardIcon,
+} from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -14,7 +20,7 @@ import {
 export default function UserMenu() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger className="cursor-pointer" asChild>
         <Avatar>
           <AvatarImage src={`/images/avatars/01.png`} alt="User avatar" />
           <AvatarFallback className="rounded-lg">TB</AvatarFallback>
@@ -42,21 +48,44 @@ export default function UserMenu() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <BadgeCheck />
-            Account
+          <DropdownMenuItem
+            className="cursor-pointer transition-all duration-200"
+            asChild
+          >
+            <Link href="/profile">
+              <UserIcon className="size-5" />
+              Account
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer transition-all duration-200"
+            asChild
+          >
+            <Link href="/profile">
+              <TransactionsLinearIcon className="size-5" />
+              Whitelist
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer transition-all duration-200"
+            asChild
+          >
+            <Link href="/profile">
+              <ForwardIcon className="size-5" />
+              Referal Link
+            </Link>
+          </DropdownMenuItem>
+          {/* <DropdownMenuItem className="cursor-pointer transition-all duration-200">
             <CreditCard />
             WhiteList
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer transition-all duration-200">
             <Bell />
             Referal Link
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer transition-all duration-200">
           <LogOut />
           Log out
         </DropdownMenuItem>

@@ -27,75 +27,68 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const desktopData = [
-  { month: "january", desktop: 186, fill: "var(--color-january)" },
-  { month: "february", desktop: 305, fill: "var(--color-february)" },
-  { month: "march", desktop: 237, fill: "var(--color-march)" },
-  { month: "april", desktop: 173, fill: "var(--color-april)" },
-  { month: "may", desktop: 209, fill: "var(--color-may)" },
+// Values from stat-cards.tsx (Crypto, Stable, Fiat) + total from welcome.tsx
+const balanceData = [
+  { name: "crypto", value: 25582.34, fill: "var(--chart-1)" },
+  { name: "stable", value: 3413.25, fill: "var(--chart-2)" },
+  { name: "fiat", value: 1234.56, fill: "var(--chart-3)" },
 ];
 
+const totalBalance = 39231.9; // from welcome.tsx
+
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  value: {
+    label: "Balance",
   },
-  desktop: {
-    label: "Desktop",
-  },
-  mobile: {
-    label: "Mobile",
-  },
-  january: {
-    label: "January",
+  crypto: {
+    label: "Crypto",
     color: "var(--chart-1)",
   },
-  february: {
-    label: "February",
+  stable: {
+    label: "Stable",
     color: "var(--chart-2)",
   },
-  march: {
-    label: "March",
+  fiat: {
+    label: "Fiat Wealth",
     color: "var(--chart-3)",
   },
-  april: {
-    label: "April",
+  total: {
+    label: "Total",
     color: "var(--chart-4)",
-  },
-  may: {
-    label: "May",
-    color: "var(--chart-5)",
   },
 } satisfies ChartConfig;
 
-type ChartConfigKeys = keyof typeof chartConfig;
-
-const displayData = desktopData.slice(0, 4);
+const displayKeys = ["total", "crypto", "stable", "fiat"] as const;
 
 export function ChartProjectEfficiency() {
   const id = "pie-interactive";
-  const [activeMonth, setActiveMonth] = React.useState(desktopData[0].month);
+  const [activeKey, setActiveKey] = React.useState<string>("total");
 
   const activeIndex = React.useMemo(
-    () => desktopData.findIndex((item) => item.month === activeMonth),
-    [activeMonth],
+    () =>
+      activeKey === "total"
+        ? -1
+        : balanceData.findIndex((item) => item.name === activeKey),
+    [activeKey],
   );
-  const months = React.useMemo(() => desktopData.map((item) => item.month), []);
+  const selectOptions = React.useMemo(
+    () => ["total", ...balanceData.map((item) => item.name)],
+    [],
+  );
 
   return (
     <Card data-chart={id}>
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader>
-        <CardDescription>January - June 2026</CardDescription>
-        <CardTitle className="font-display text-xl">
-          Project Efficiency
-        </CardTitle>
+        <CardDescription>Balance overview</CardDescription>
+        <CardTitle className="font-display text-xl">Balance chart</CardTitle>
         <CardAction>
-          <Select value={activeMonth} onValueChange={setActiveMonth}>
+          <Select value={activeKey} onValueChange={setActiveKey}>
             <SelectTrigger className="ml-auto" aria-label="Select a value">
-              <SelectValue placeholder="Select month" />
+              <SelectValue placeholder="Select balance" />
             </SelectTrigger>
             <SelectContent align="end">
-              {months.map((key) => {
+              {selectOptions.map((key) => {
                 const config = chartConfig[key as keyof typeof chartConfig];
 
                 if (!config) {
@@ -122,11 +115,11 @@ export function ChartProjectEfficiency() {
           </Select>
         </CardAction>
       </CardHeader>
-      <CardContent className="flex flex-1 justify-center pb-0">
+      <CardContent className="flex flex-1 flex-col justify-center pb-0">
         <ChartContainer
           id={id}
           config={chartConfig}
-          className="mx-auto aspect-square w-full max-w-[230px]"
+          className="m-auto aspect-square w-full max-w-[360px]"
         >
           <PieChart>
             <ChartTooltip
@@ -134,12 +127,12 @@ export function ChartProjectEfficiency() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
-              data={desktopData}
-              dataKey="desktop"
-              nameKey="month"
-              innerRadius={45}
+              data={balanceData}
+              dataKey="value"
+              nameKey="name"
+              innerRadius={59}
               strokeWidth={5}
-              activeIndex={activeIndex}
+              activeIndex={activeIndex >= 0 ? activeIndex : undefined}
               activeShape={({
                 outerRadius = 0,
                 ...props
@@ -157,6 +150,15 @@ export function ChartProjectEfficiency() {
               <Label
                 content={({ viewBox }) => {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    const displayValue =
+                      activeKey === "total"
+                        ? totalBalance
+                        : (balanceData[activeIndex]?.value ?? totalBalance);
+                    const displayLabel =
+                      activeKey === "total"
+                        ? "Total"
+                        : (chartConfig[activeKey as keyof typeof chartConfig]
+                            ?.label ?? "Balance");
                     return (
                       <text
                         x={viewBox.cx}
@@ -167,16 +169,21 @@ export function ChartProjectEfficiency() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="font-bold"
+                          style={{ fill: "#6C737F", fontSize: "1.4em" }}
                         >
-                          {desktopData[activeIndex].desktop.toLocaleString()}
+                          $
+                          {displayValue.toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          {displayLabel}
                         </tspan>
                       </text>
                     );
@@ -186,13 +193,16 @@ export function ChartProjectEfficiency() {
             </Pie>
           </PieChart>
         </ChartContainer>
-        <div className="flex flex-col justify-around pt-4">
-          {displayData.map((item) => {
-            const config = chartConfig[item.month as ChartConfigKeys];
+        <div className="flex items-center justify-around pt-4 flex-wrap gap-2">
+          {displayKeys.map((key) => {
+            const isTotal = key === "total";
+            const item = balanceData.find((d) => d.name === key);
+            const config = chartConfig[key];
             const color =
               config && "color" in config ? config.color : undefined;
+            const value = isTotal ? totalBalance : item?.value;
             return (
-              <div className="flex flex-col" key={item.month}>
+              <div className="flex flex-col" key={key}>
                 <div className="mb-1 flex items-center gap-2">
                   <span
                     className="block size-2 rounded-full"
@@ -204,8 +214,12 @@ export function ChartProjectEfficiency() {
                     {config?.label}
                   </div>
                 </div>
-                <div className="ms-3.5 text-lg font-semibold">
-                  {item.desktop}
+                <div className="ms-3.5 text-md font-semibold">
+                  $
+                  {value?.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </div>
               </div>
             );

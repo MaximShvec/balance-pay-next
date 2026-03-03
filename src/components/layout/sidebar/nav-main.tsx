@@ -21,11 +21,19 @@ import { usePathname } from "next/navigation";
 
 export const navItems = [
   { title: "Dashboard", href: "/", icon: WalletLinearIcon },
-  { title: "Assets", href: "/", icon: AssetIcon },
-  { title: "My transactions", href: "/", icon: TransactionsLinearIcon },
-  { title: "Buy & Sell", href: "/", icon: BuysellIcon },
-  { title: "Funds Connect", href: "/", icon: FundsconnectLinearIcon },
-  { title: "Verification", href: "/", icon: AmlLinearIcon },
+  // { title: "Cards", href: "/cards", icon: AssetIcon },
+  {
+    title: "My transactions",
+    href: "/transactions",
+    icon: TransactionsLinearIcon,
+  },
+  // { title: "Buy & Sell", href: "/", icon: BuysellIcon },
+  {
+    title: "Funds Connect",
+    href: "/funds-connect",
+    icon: FundsconnectLinearIcon,
+  },
+  // { title: "Verification", href: "/", icon: AmlLinearIcon },
 ];
 
 /** Grouped nav items for search command palette */

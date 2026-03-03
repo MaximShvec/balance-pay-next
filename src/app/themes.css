@@ -35,3 +35,116 @@
   --text-sm: 1rem;
   --spacing: 0.262222rem;
 }
+
+/* Form elements - Figma: border 1px #131316 2%, background #F3F4F6 */
+/* form-control: FormControl (Slot) merges props and overrides data-slot when wrapping Input/Select/Textarea */
+/* Исключаем radio и checkbox — у них data-slot перезаписывается на form-control, но стили должны быть свои */
+/* [data-slot="input"],
+[data-slot="select-trigger"],
+[data-slot="textarea"],
+[data-slot="form-control"]:not([role="radio"]):not([role="checkbox"]) {
+  border: 1px solid rgba(19, 19, 22, 0.02);
+  background-color: #f3f4f6;
+  caret-color: #ffae00;
+  transition: box-shadow 200ms ease, border-color 200ms ease,
+    background-color 200ms ease;
+} */
+
+[data-slot="input"]:focus-visible,
+[data-slot="select-trigger"]:focus-visible,
+[data-slot="select-trigger"][data-state="open"],
+[data-slot="textarea"]:focus-visible,
+[data-slot="form-control"]:not([role="radio"]):not(
+    [role="checkbox"]
+  ):focus-visible,
+[data-slot="form-control"][data-state="open"] {
+  border-color: var(--border);
+  box-shadow: 0 0 2px 0 #ffae00;
+  outline: none;
+}
+
+/* Radio group — без серого фона, без бордера 1px form-control */
+[role="radiogroup"],
+[role="radiogroup"] [data-slot="form-control"],
+[data-slot="form-control"]:has([data-slot="radio-group-item"]),
+[data-slot="radio-group"] {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+[data-slot="radio-group-item"] {
+  background-color: transparent !important;
+}
+
+/* Checkbox — без серого фона form-control (в unchecked состоянии) */
+[data-slot="form-control"][role="checkbox"]:not([data-state="checked"]),
+[data-slot="checkbox"]:not([data-state="checked"]) {
+  background-color: transparent !important;
+}
+
+/* Radio group circles — видимый бордер в светлой и тёмной теме */
+/* FormControl (Slot) перезаписывает data-slot на form-control, поэтому нужен [data-slot="form-control"][role="radio"] */
+[data-slot="radio-group-item"],
+[data-slot="form-control"][role="radio"],
+[role="radio"] {
+  border: 2px solid var(--base-500) !important;
+  background-color: transparent !important;
+}
+
+[data-slot="radio-group-item"][data-state="checked"],
+[data-slot="form-control"][role="radio"][data-state="checked"],
+[role="radio"][data-state="checked"] {
+  border-color: var(--base-700) !important;
+}
+
+.dark [data-slot="radio-group-item"],
+.dark [data-slot="form-control"][role="radio"],
+.dark [role="radio"] {
+  border: 2px solid rgba(255, 255, 255, 0.75) !important;
+}
+
+.dark [data-slot="radio-group-item"][data-state="checked"],
+.dark [data-slot="form-control"][role="radio"][data-state="checked"],
+.dark [role="radio"][data-state="checked"] {
+  border-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Radio и Switch — убрать оранжевую тень фокуса */
+[data-slot="radio-group-item"]:focus-visible,
+[data-slot="form-control"][role="radio"]:focus-visible,
+[data-slot="switch"]:focus-visible,
+[data-slot="form-control"]:has([data-slot="switch-thumb"]):focus-visible {
+  box-shadow: none !important;
+}
+
+/* Switch в checked state — чёрный фон (переопределяет form-control) */
+[data-slot="switch"][data-state="checked"],
+[data-slot="form-control"]:has(
+    [data-slot="switch-thumb"]
+  )[data-state="checked"] {
+  background-color: black !important;
+}
+
+.dark [data-slot="switch"][data-state="checked"],
+.dark
+  [data-slot="form-control"]:has(
+    [data-slot="switch-thumb"]
+  )[data-state="checked"] {
+  background-color: white !important;
+}
+
+/* Switch thumb — белый на чёрном треке (light), чёрный на белом (dark) */
+[data-slot="switch"][data-state="checked"] [data-slot="switch-thumb"],
+[data-slot="form-control"]:has([data-slot="switch-thumb"])[data-state="checked"]
+  [data-slot="switch-thumb"] {
+  background-color: white !important;
+}
+
+.dark [data-slot="switch"][data-state="checked"] [data-slot="switch-thumb"],
+.dark
+  [data-slot="form-control"]:has(
+    [data-slot="switch-thumb"]
+  )[data-state="checked"]
+  [data-slot="switch-thumb"] {
+  background-color: black !important;
+}

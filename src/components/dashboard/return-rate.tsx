@@ -61,7 +61,9 @@ export function ReturnRateCard() {
   return (
     <Card>
       <CardHeader>
-        <CardDescription className="relative">Returning Rate</CardDescription>
+        <CardDescription className="relative">
+          History of funds turnover
+        </CardDescription>
         <CardAction className="flex gap-2">
           <Select value={dateRange} onValueChange={handleDateRangeChange}>
             <SelectTrigger>

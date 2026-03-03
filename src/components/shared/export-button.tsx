@@ -1,15 +1,22 @@
-import { FolderUp } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { FolderUp } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import {
   DropdownMenu,
   DropdownMenuItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { CsvIcon } from "@/components/icons";
 
-export function ExportButton({ className }: { className?: string }) {
+export function ExportButton({
+  className,
+  onExportCsv,
+}: {
+  className?: string;
+  onExportCsv?: () => void;
+}) {
   return (
     <div className={cn(className)}>
       <DropdownMenu>
@@ -19,10 +26,11 @@ export function ExportButton({ className }: { className?: string }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem>Excel</DropdownMenuItem>
-          <DropdownMenuItem>PDF</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onExportCsv?.()}>
+            <CsvIcon className="size-4" /> CSV
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  )
+  );
 }

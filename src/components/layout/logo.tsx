@@ -3,10 +3,10 @@ import Image from "next/image";
 export default function Logo() {
   return (
     <Image
-      src="/logo-white.svg"
+      src="/logo.svg"
       width={30}
       height={30}
-      className=" rounded-[5px] transition-all group-data-collapsible:size-6 group-data-[collapsible=icon]:size-8"
+      className="transition-all group-data-collapsible:size-6 group-data-[collapsible=icon]:size-8"
       alt="Balance Pay logo"
     />
   );

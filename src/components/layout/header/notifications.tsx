@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { BellIcon, ClockIcon } from "lucide-react"
-import Link from "next/link"
-import { useIsMobile } from "@/hooks/use-mobile"
+import { BellIcon, ClockIcon } from "lucide-react";
+import Link from "next/link";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import {
   DropdownMenu,
@@ -10,30 +10,41 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/dropdown-menu";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
-import { notifications, type Notification } from "./data"
+import { notifications, type Notification } from "./data";
 
 const Notifications = () => {
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile();
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger
+        className="cursor-pointer transition-all duration-200"
+        asChild
+      >
         <Button size="icon-sm" variant="ghost" className="relative">
           <BellIcon />
           <span className="bg-destructive absolute end-0.5 top-0.5 block size-1.5 shrink-0 rounded-full"></span>
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align={isMobile ? "center" : "end"} className="ms-4 w-80 p-0">
+      <DropdownMenuContent
+        align={isMobile ? "center" : "end"}
+        className="ms-4 w-80 p-0"
+      >
         <DropdownMenuLabel className="bg-background dark:bg-muted sticky top-0 z-10 p-0">
           <div className="flex justify-between border-b px-6 py-4">
             <div className="font-medium">Notifications</div>
-            <Button variant="link" className="h-auto p-0 text-xs" size="icon-sm" asChild>
+            <Button
+              variant="link"
+              className="h-auto p-0 text-xs"
+              size="icon-sm"
+              asChild
+            >
               <Link href="/dashboard/notifications">View all</Link>
             </Button>
           </div>
@@ -75,7 +86,7 @@ const Notifications = () => {
         </ScrollArea>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
+  );
+};
 
-export default Notifications
+export default Notifications;

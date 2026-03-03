@@ -2,11 +2,8 @@
 
 import * as React from "react";
 import { useEffect } from "react";
-import {
-  ChevronsUpDown,
-  Plus,
-  ShoppingBagIcon,
-} from "lucide-react";
+import { ChevronsUpDown, Plus, ShoppingBagIcon } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useIsTablet } from "@/hooks/use-mobile";
 
@@ -43,7 +40,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   useEffect(() => {
     setOpen(!isTablet);
-  }, [isTablet, setOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- только при смене breakpoint, не при ручном toggle
+  }, [isTablet]);
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -53,9 +51,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton className="hover:text-foreground h-10 group-data-[collapsible=icon]:px-0! hover:bg-[var(--primary)]/5 cursor-pointer transition-all duration-200">
-                  <div className="flex items-center justify-center bg-primary rounded-[6px] p-[3px] w-[24px] h-[24px]">
-                    <Logo />
-                  </div>
+                  <Logo />
                   <span className="text-foreground font-semibold">
                     Balance Pay
                   </span>
@@ -70,14 +66,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               >
                 <DropdownMenuLabel>Projects</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="flex items-center gap-3">
-                  <div className="flex size-8 items-center justify-center rounded-md border">
-                    <ShoppingBagIcon className="text-muted-foreground size-4" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium">Personal</span>
-                    <span className="text-xs text-green-700">Active</span>
-                  </div>
+                <DropdownMenuItem
+                  className="flex items-center gap-3 cursor-pointer transition-all duration-200"
+                  asChild
+                >
+                  <Link href="/profile">
+                    <div className="flex size-8 items-center justify-center rounded-md border">
+                      <ShoppingBagIcon className="text-muted-foreground size-4" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">Personal</span>
+                      <span className="text-xs text-green-700">Active</span>
+                    </div>
+                  </Link>
                 </DropdownMenuItem>
                 {/* <DropdownMenuItem className="flex items-center gap-3">
                   <div className="flex size-8 items-center justify-center rounded-md border">
@@ -103,9 +104,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </DropdownMenuItem> */}
                 <DropdownMenuSeparator />
                 {/* по клику на "New, открываются два пункта меню Cards и Business" */}
-                <Button className="w-full cursor-pointer transition-all duration-200">
-                  <Plus className="size-4" />
-                  New
+                <Button
+                  className="w-full cursor-pointer transition-all duration-200"
+                  asChild
+                >
+                  <Link href="/new-workspace">
+                    <Plus className="size-4" />
+                    New
+                  </Link>
                 </Button>
               </DropdownMenuContent>
             </DropdownMenu>
