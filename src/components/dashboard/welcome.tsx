@@ -11,7 +11,7 @@ import {
 
 export function WelcomeCard() {
   return (
-    <Card className="bg-muted relative overflow-hidden md:col-span-12 lg:col-span-4">
+    <Card className="bg-muted relative overflow-hidden md:col-span-12 xl:col-span-4">
       <CardHeader>
         <CardTitle className="text-2xl">Congratulations Maksim! 🎉</CardTitle>
         <CardDescription>Your total balance today is</CardDescription>
@@ -24,9 +24,9 @@ export function WelcomeCard() {
               <span className="text-green-500">+65%</span> from last month
             </div>
           </div>
-          <Button variant="default" className="self-end">
+          {/* <Button variant="default" className="self-end">
             View History
-          </Button>
+          </Button> */}
         </div>
       </CardContent>
       <Image

@@ -4,9 +4,9 @@ export default function Logo() {
   return (
     <Image
       src="/logo.svg"
-      width={30}
-      height={30}
-      className="transition-all group-data-collapsible:size-6 group-data-[collapsible=icon]:size-8"
+      width={32}
+      height={32}
+      className="size-8 shrink-0"
       alt="Balance Pay logo"
     />
   );

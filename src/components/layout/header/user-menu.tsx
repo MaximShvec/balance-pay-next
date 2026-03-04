@@ -26,7 +26,7 @@ export default function UserMenu() {
       >
         <button
           type="button"
-          className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted/50 hover:bg-muted"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted/50 hover:bg-muted"
           aria-label="User menu"
         >
           <UserIcon className="size-5 text-muted-foreground" />

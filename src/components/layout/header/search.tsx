@@ -39,7 +39,7 @@ export default function Search() {
       <div className="relative hidden max-w-[240px] flex-1 lg:block">
         <SearchIcon className="text-muted-foreground absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2" />
         <Input
-          className="bg-muted/50 h-9 w-full cursor-pointer rounded-full border-0 pr-10 pl-4 text-sm placeholder:text-muted-foreground focus-visible:ring-1"
+          className="bg-muted/50 h-10 w-full cursor-pointer rounded-full border-0 pr-10 pl-4 text-sm placeholder:text-muted-foreground focus-visible:ring-1"
           placeholder="Search..."
           type="search"
           onFocus={() => setOpen(true)}

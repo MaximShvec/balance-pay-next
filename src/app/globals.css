@@ -168,4 +168,9 @@
   [data-slot="drawer-overlay"] {
     @apply bg-black/20! backdrop-blur-sm;
   }
+
+  /* Скрыть текст в пунктах меню сайдбара при свёрнутом состоянии */
+  [data-slot="sidebar"][data-collapsible="icon"] [data-slot="sidebar-menu-button"] > span:not([class*="ml-auto"]) {
+    display: none !important;
+  }
 }

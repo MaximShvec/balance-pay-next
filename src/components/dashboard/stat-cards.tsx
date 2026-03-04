@@ -2,12 +2,7 @@
 
 import { cn } from "@/lib/utils";
 
-import {
-  DotsIcon,
-  MoveIcon,
-  RecieveIcon,
-  SendIcon,
-} from "@/components/icons";
+import { DotsIcon, MoveIcon, RecieveIcon, SendIcon } from "@/components/icons";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -56,7 +51,7 @@ const data = [
 
 export default function StatCards() {
   return (
-    <div className="flex w-full items-center justify-center">
+    <div className="flex w-full justify-center h-full">
       <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
         {data.map((item) => (
           <Card key={item.name} className="py-0">
@@ -76,7 +71,7 @@ export default function StatCards() {
                   {item.change}
                 </span>
               </div>
-              <dd className="text-foreground mt-1 text-3xl font-semibold">
+              <dd className="text-foreground mt-1 text-2xl xl:text-3xl font-semibold truncate">
                 {item.value}
               </dd>
             </CardContent>
