@@ -193,7 +193,7 @@ export function ChartProjectEfficiency() {
             </Pie>
           </PieChart>
         </ChartContainer>
-        <div className="flex items-center justify-around pt-4 flex-wrap gap-2">
+        {/* <div className="flex items-center justify-around pt-4 flex-wrap gap-2">
           {displayKeys.map((key) => {
             const isTotal = key === "total";
             const item = balanceData.find((d) => d.name === key);
@@ -224,7 +224,7 @@ export function ChartProjectEfficiency() {
               </div>
             );
           })}
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   );
