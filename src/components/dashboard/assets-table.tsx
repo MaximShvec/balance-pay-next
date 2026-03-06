@@ -549,7 +549,7 @@ export function AssetsTable() {
   const [selectedNetworks, setSelectedNetworks] = React.useState<Set<string>>(
     new Set(),
   );
-  const [showFilters, setShowFilters] = React.useState(true);
+  const [showFilters, setShowFilters] = React.useState(false);
 
   const uniqueCurrencies = React.useMemo(() => {
     const seen = new Set<string>();
