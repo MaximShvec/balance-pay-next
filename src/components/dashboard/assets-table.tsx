@@ -23,7 +23,15 @@ import {
   PlusCircle,
 } from "lucide-react";
 
-import { DotsIcon, FilterIcon } from "@/components/icons";
+import {
+  AssetIcon,
+  BuyIcon,
+  DotsIcon,
+  FilterIcon,
+  RecieveIcon,
+  SendIcon,
+} from "@/components/icons";
+import { MoveIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -168,8 +176,8 @@ const orders: Order[] = [
       image: "/images/currencies/EUR.svg",
       network: "SEPA",
     },
-    balance: 1200,
-    balanceUsd: 1300,
+    balance: 0,
+    balanceUsd: 0,
     priceUsd: 1.08,
     performance24h: -1.9,
     product: { name: "Engine Kit" },
@@ -214,7 +222,7 @@ const orders: Order[] = [
       network: "TRC-20",
     },
     balance: 0,
-    balanceUsd: 500,
+    balanceUsd: 0,
     priceUsd: 1,
     performance24h: 0.1,
     product: { name: "Steering Wheel" },
@@ -258,8 +266,8 @@ const orders: Order[] = [
       image: "/images/currencies/TRX.svg",
       network: "TRC-20",
     },
-    balance: 1500,
-    balanceUsd: 290,
+    balance: 0,
+    balanceUsd: 0,
     priceUsd: 0.19,
     performance24h: -3.1,
     product: { name: "Radiator Cap" },
@@ -303,8 +311,8 @@ const orders: Order[] = [
       image: "/images/currencies/USDT_SOL.svg",
       network: "SOLANA",
     },
-    balance: 250,
-    balanceUsd: 250,
+    balance: 0,
+    balanceUsd: 0,
     priceUsd: 1,
     performance24h: -0.5,
     product: { name: "Transmission Fluid" },
@@ -485,9 +493,21 @@ const columns: ColumnDef<Order>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Copy order ID</DropdownMenuItem>
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
+              <DropdownMenuItem>
+                <AssetIcon /> Asset Page
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <SendIcon /> Send
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <RecieveIcon /> Receive
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <MoveIcon /> Move
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <BuyIcon /> Buy & Sell
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

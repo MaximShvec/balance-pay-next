@@ -29,17 +29,16 @@ import { CalendarIcon, Download } from "lucide-react";
 
 export function ReturnRateCard() {
   const [dateRange, setDateRange] = useState("this-week");
-
   const handleDateRangeChange = (value: string) => {
     setDateRange(value);
   };
   const chartConfig = {
     desktop: {
-      label: "Desktop",
-      color: "var(--chart-1)",
+      label: "Crypto",
+      color: "#009835",
     },
     mobile: {
-      label: "Mobile",
+      label: "Fiat",
       color: "var(--chart-2)",
     },
   } satisfies ChartConfig;
@@ -96,47 +95,61 @@ export function ReturnRateCard() {
           </Badge>
         </div>
       </CardHeader>
-      <CardContent>
-        <ChartContainer
-          className="mt-0 !aspect-21/9 w-full md:mt-6"
-          config={chartConfig}
-        >
-          <LineChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
+      <CardContent className="mt-auto">
+        <div className="w-full">
+          <ChartContainer
+            className="mt-0 !aspect-21/9 w-full md:mt-6"
+            config={chartConfig}
           >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value}
-            />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <Line
-              dataKey="desktop"
-              stroke="var(--color-desktop)"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              dataKey="mobile"
-              stroke="var(--color-mobile)"
-              style={
-                {
-                  opacity: 0.35,
-                } as React.CSSProperties
-              }
-              strokeWidth={2}
-              dot={false}
-            />
-          </LineChart>
-        </ChartContainer>
+            <LineChart
+              accessibilityLayer
+              data={chartData}
+              margin={{
+                left: 12,
+                right: 12,
+                bottom: 0,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="month"
+                scale="point"
+                padding={{ left: 0, right: 0 }}
+                hide
+                tickLine={false}
+                axisLine={false}
+              />
+              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+              <Line
+                dataKey="desktop"
+                stroke="var(--color-desktop)"
+                strokeWidth={2}
+                dot={false}
+              />
+              <Line
+                dataKey="mobile"
+                stroke="var(--color-mobile)"
+                style={
+                  {
+                    opacity: 0.35,
+                  } as React.CSSProperties
+                }
+                strokeWidth={2}
+                dot={false}
+              />
+            </LineChart>
+          </ChartContainer>
+          <div
+            className="text-muted-foreground mt-2 grid grid-cols-12 gap-0 text-center text-xs"
+            aria-hidden
+          >
+            {chartData.map(({ month }) => (
+              <span key={month} className="truncate px-0.5" title={month}>
+                {month}
+              </span>
+            ))}
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

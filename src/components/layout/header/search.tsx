@@ -49,7 +49,7 @@ export default function Search() {
         <Button
           size="icon"
           variant="ghost"
-          className="size-9 rounded-full bg-muted/50 hover:bg-muted"
+          className="size-12 rounded-full bg-muted/50 hover:bg-muted"
           onClick={() => setOpen(true)}
         >
           <SearchIcon className="size-5 text-muted-foreground" />

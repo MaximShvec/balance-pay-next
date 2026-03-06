@@ -29,7 +29,7 @@ export function SiteHeader() {
         </Button>
         <Separator
           orientation="vertical"
-          className="mx-2 min-[1200px]:hidden data-[orientation=vertical]:h-4"
+          className="mx-2 hidden md:block min-[1200px]:hidden data-[orientation=vertical]:h-4"
         />
 
         <HeaderTitleSlot />
@@ -39,7 +39,7 @@ export function SiteHeader() {
           <Notifications />
           <Separator
             orientation="vertical"
-            className="mx-2 data-[orientation=vertical]:h-4"
+            className="mx-2 hidden md:block data-[orientation=vertical]:h-4"
           />
           <UserMenu />
         </div>
