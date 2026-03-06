@@ -34,7 +34,7 @@ export default async function AppLayout({
         <HeaderProvider>
           <SiteHeader />
           <div className="flex flex-1 flex-col">
-            <div className="@container/main p-4 xl:group-data-[theme-content-layout=centered]/layout:container xl:group-data-[theme-content-layout=centered]/layout:mx-auto">
+            <div className="@container/main p-4 xl:p-8 xl:group-data-[theme-content-layout=centered]/layout:container xl:group-data-[theme-content-layout=centered]/layout:mx-auto">
               {children}
             </div>
           </div>

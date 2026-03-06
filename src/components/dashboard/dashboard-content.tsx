@@ -7,7 +7,7 @@ import {
   ReturnRateCard,
   RecentOrdersCard,
 } from "@/components/dashboard";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 
 function DashboardTabContent() {
   return (
@@ -36,14 +36,10 @@ function DashboardTabContent() {
 export function DashboardContent() {
   return (
     <Tabs defaultValue="usd" className="w-full">
-      <TabsList>
-        <TabsTrigger value="usd">USD</TabsTrigger>
-        <TabsTrigger value="eur">EUR</TabsTrigger>
-      </TabsList>
-      <TabsContent value="usd" className="mt-4 space-y-4">
+      <TabsContent value="usd" className="space-y-4">
         <DashboardTabContent />
       </TabsContent>
-      <TabsContent value="eur" className="mt-4 space-y-4">
+      <TabsContent value="eur" className="space-y-4">
         <DashboardTabContent />
       </TabsContent>
     </Tabs>

@@ -193,7 +193,7 @@ export function ChartProjectEfficiency() {
             </Pie>
           </PieChart>
         </ChartContainer>
-        {/* <div className="flex items-center justify-around pt-4 flex-wrap gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-8">
           {displayKeys.map((key) => {
             const isTotal = key === "total";
             const item = balanceData.find((d) => d.name === key);
@@ -202,29 +202,30 @@ export function ChartProjectEfficiency() {
               config && "color" in config ? config.color : undefined;
             const value = isTotal ? totalBalance : item?.value;
             return (
-              <div className="flex flex-col" key={key}>
-                <div className="mb-1 flex items-center gap-2">
-                  <span
-                    className="block size-2 rounded-full"
-                    style={{
-                      backgroundColor: color,
-                    }}
-                  />
-                  <div className="text-xs tracking-wide uppercase">
-                    {config?.label}
-                  </div>
-                </div>
-                <div className="ms-3.5 text-md font-semibold">
+              <div
+                key={key}
+                className="bg-[var(--base-200)] flex items-center gap-2 rounded-full p-4"
+              >
+                <span
+                  className="size-2 shrink-0 rounded-full"
+                  style={{
+                    backgroundColor: color,
+                  }}
+                />
+                <span className="text-xs tracking-wide uppercase flex-1 min-w-0 truncate">
+                  {config?.label}
+                </span>
+                <span className="text-xs font-semibold shrink-0">
                   $
                   {value?.toLocaleString("en-US", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
-                </div>
+                </span>
               </div>
             );
           })}
-        </div> */}
+        </div>
       </CardContent>
     </Card>
   );

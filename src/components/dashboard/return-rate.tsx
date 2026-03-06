@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, Download } from "lucide-react";
@@ -64,7 +65,7 @@ export function ReturnRateCard() {
         <CardDescription className="relative">
           History of funds turnover
         </CardDescription>
-        <CardAction className="flex gap-2">
+        <CardAction className="flex flex-wrap gap-2 justify-end">
           <Select value={dateRange} onValueChange={handleDateRangeChange}>
             <SelectTrigger>
               <CalendarIcon />
@@ -83,6 +84,10 @@ export function ReturnRateCard() {
           <Button variant="outline" size="icon">
             <Download />
           </Button>
+          <TabsList className="ml-auto">
+            <TabsTrigger value="usd">USD</TabsTrigger>
+            <TabsTrigger value="eur">EUR</TabsTrigger>
+          </TabsList>
         </CardAction>
         <div className="flex items-center gap-2">
           <div className="font-display text-2xl">$42,379</div>

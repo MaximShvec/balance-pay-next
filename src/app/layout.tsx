@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Balance Pay",
-  description: "E-commerce admin dashboard",
+  description: "Admin dashboard for Balance Pay",
 };
 
 export default function RootLayout({

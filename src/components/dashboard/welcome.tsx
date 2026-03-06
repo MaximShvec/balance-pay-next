@@ -11,7 +11,7 @@ import {
 
 export function WelcomeCard() {
   return (
-    <Card className="bg-muted relative overflow-hidden md:col-span-12 xl:col-span-4">
+    <Card className="bg-[var(--base-200)] relative overflow-hidden md:col-span-12 xl:col-span-4">
       <CardHeader>
         <CardTitle className="text-2xl">Congratulations Maksim! 🎉</CardTitle>
         <CardDescription>Your total balance today is</CardDescription>
@@ -29,14 +29,14 @@ export function WelcomeCard() {
           </Button> */}
         </div>
       </CardContent>
-      <Image
+      {/* <Image
         width={800}
         height={300}
         src={`/star-shape.png`}
         className="pointer-events-none absolute inset-0 aspect-auto"
         unoptimized
         alt="..."
-      />
+      /> */}
     </Card>
   );
 }

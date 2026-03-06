@@ -10,33 +10,42 @@ import {
 } from "@/components/ui/sidebar";
 import {
   WalletLinearIcon,
+  WalletBoldIcon,
   AssetIcon,
   TransactionsLinearIcon,
+  TransactionsBoldIcon,
   BuysellIcon,
   FundsconnectLinearIcon,
+  FundsconnectBoldIcon,
   AmlLinearIcon,
 } from "@/components/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export const navItems = [
-  { title: "Dashboard", href: "/", icon: WalletLinearIcon },
+  {
+    title: "Dashboard",
+    href: "/",
+    icon: WalletLinearIcon,
+    iconActive: WalletBoldIcon,
+  },
   // { title: "Cards", href: "/cards", icon: AssetIcon },
   {
-    title: "My transactions",
+    title: "Transactions",
     href: "/transactions",
     icon: TransactionsLinearIcon,
+    iconActive: TransactionsBoldIcon,
   },
   // { title: "Buy & Sell", href: "/", icon: BuysellIcon },
   {
     title: "Funds Connect",
     href: "/funds-connect",
     icon: FundsconnectLinearIcon,
+    iconActive: FundsconnectBoldIcon,
   },
   // { title: "Verification", href: "/", icon: AmlLinearIcon },
 ];
 
-/** Grouped nav items for search command palette */
 export const searchNavItems = [{ title: "Menu", items: navItems }];
 
 export function NavMain() {
@@ -56,7 +65,12 @@ export function NavMain() {
                 asChild
               >
                 <Link href={item.href}>
-                  {item.icon && <item.icon />}
+                  {item.icon &&
+                    (pathname === item.href && item.iconActive ? (
+                      <item.iconActive />
+                    ) : (
+                      <item.icon />
+                    ))}
                   <span>{item.title}</span>
                 </Link>
               </SidebarMenuButton>

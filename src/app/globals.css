@@ -57,7 +57,7 @@
 
   --base-50: #fafafb;
   --base-100: #f4f4f6;
-  --base-200: #e4e4e8;
+  --base-200: #f3f4f6;
   --base-300: #d4d4da;
   --base-400: #9f9fa7;
   --base-500: #71717b;
@@ -99,13 +99,13 @@
   --sidebar-foreground: var(--base-500);
   --sidebar-primary: var(--base-950);
   --sidebar-primary-foreground: var(--color-white);
-  --sidebar-accent: #F3F4F6;
+  --sidebar-accent: #f3f4f6;
   --sidebar-accent-foreground: var(--base-950);
   --sidebar-border: var(--base-200);
   --sidebar-ring: var(--base-800);
 
   /* Высота шапки: 80px desktop, 56px mobile */
-  --header-height: calc(var(--spacing) * 20);
+  --header-height: calc(var(--spacing) * 24);
 }
 
 @media (max-width: 767px) {
@@ -170,7 +170,9 @@
   }
 
   /* Скрыть текст в пунктах меню сайдбара при свёрнутом состоянии */
-  [data-slot="sidebar"][data-collapsible="icon"] [data-slot="sidebar-menu-button"] > span:not([class*="ml-auto"]) {
+  [data-slot="sidebar"][data-collapsible="icon"]
+    [data-slot="sidebar-menu-button"]
+    > span:not([class*="ml-auto"]) {
     display: none !important;
   }
 }

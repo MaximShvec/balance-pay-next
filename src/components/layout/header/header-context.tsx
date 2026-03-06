@@ -83,9 +83,9 @@ export function HeaderTitleSlot() {
   return (
     <div
       data-slot="header-title"
-      className="flex min-w-0 flex-1 flex-wrap items-center gap-2 min-[1200px]:ml-2"
+      className="flex min-w-0 flex-1 flex-wrap items-center gap-2"
     >
-      <h1 className="text-foreground text-lg font-semibold lg:text-xl shrink-0">
+      <h1 className="text-foreground text-lg font-semibold lg:text-2xl shrink-0">
         {title}
       </h1>
       {extra}

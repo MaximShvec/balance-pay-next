@@ -23,7 +23,7 @@ import {
   PlusCircle,
 } from "lucide-react";
 
-import { DotsIcon } from "@/components/icons";
+import { DotsIcon, FilterIcon } from "@/components/icons";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -73,6 +73,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AnimatePresence, motion } from "motion/react";
 
 export type Order = {
   id: number;
@@ -527,6 +528,7 @@ export function RecentOrdersCard() {
   const [selectedNetworks, setSelectedNetworks] = React.useState<Set<string>>(
     new Set(),
   );
+  const [showFilters, setShowFilters] = React.useState(true);
 
   const uniqueCurrencies = React.useMemo(() => {
     const seen = new Set<string>();
@@ -620,12 +622,21 @@ export function RecentOrdersCard() {
   });
 
   return (
-    <Card className="lg:col-span-12">
-      <CardHeader>
-        <CardTitle>Recent Orders</CardTitle>
-        <CardAction className="relative">
+    <Card className="lg:col-span-12 border-none py-0 gap-4">
+      <CardHeader className="flex flex-row items-center justify-between gap-2 px-0">
+        <CardTitle>Assets</CardTitle>
+        <CardAction className="relative flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full"
+            onClick={() => setShowFilters((v) => !v)}
+            aria-label={showFilters ? "Hide filters" : "Show filters"}
+          >
+            <FilterIcon className="size-4" />
+          </Button>
           <ExportButton
-            className="absolute end-0 top-0"
+            className="shrink-0"
             onExportCsv={() => {
               const rows = table.getFilteredRowModel().rows;
               exportOrdersToCsv(rows.map((r) => r.original));
@@ -633,184 +644,201 @@ export function RecentOrdersCard() {
           />
         </CardAction>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex flex-wrap items-center gap-2 [&>*]:flex-1 [&>*]:min-w-[140px] sm:[&>*]:flex-initial sm:[&>*]:min-w-0">
-          <Input
-            placeholder="Filter assets..."
-            value={(table.getColumn("asset")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("asset")?.setFilterValue(event.target.value)
-            }
-            className="max-w-xs"
-          />
-          <Select
-            value={currencyTypeFilter}
-            onValueChange={(v) =>
-              setCurrencyTypeFilter(v as "all" | "crypto" | "stable" | "fiat")
-            }
-          >
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="crypto">Crypto</SelectItem>
-              <SelectItem value="stable">Stable</SelectItem>
-              <SelectItem value="fiat">Fiat</SelectItem>
-            </SelectContent>
-          </Select>
-          <div className="!min-w-full w-full basis-full sm:!min-w-0 sm:w-auto sm:basis-auto">
-            <div className="flex w-full items-center gap-2 rounded-md border px-3 py-2">
-              <Switch
-                id="hide-zero"
-                checked={hideZeroBalance}
-                onCheckedChange={setHideZeroBalance}
-              />
-              <label
-                htmlFor="hide-zero"
-                className="text-muted-foreground cursor-pointer text-sm"
-              >
-                Hide zero balance
-              </label>
-            </div>
-          </div>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline">
-                <PlusCircle className="size-4" />
-                Currencies
-                {selectedCurrencies.size > 0 && (
-                  <Badge variant="secondary" className="ml-1">
-                    {selectedCurrencies.size}
-                  </Badge>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-56 p-0" align="start">
-              <Command>
-                <CommandInput
-                  placeholder="Search currencies..."
-                  className="h-9"
+      <CardContent className="space-y-4 px-0">
+        <AnimatePresence initial={false}>
+          {showFilters && (
+            <motion.div
+              key="filters"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="overflow-hidden"
+            >
+              <div className="flex flex-wrap items-center gap-2 [&>*]:flex-1 [&>*]:min-w-[140px] sm:[&>*]:flex-initial sm:[&>*]:min-w-0">
+                <Input
+                  placeholder="Filter assets..."
+                  value={
+                    (table.getColumn("asset")?.getFilterValue() as string) ?? ""
+                  }
+                  onChange={(event) =>
+                    table.getColumn("asset")?.setFilterValue(event.target.value)
+                  }
+                  className="max-w-xs"
                 />
-                {selectedCurrencies.size > 0 && (
-                  <div className="border-b px-2 py-1.5">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 w-full justify-start text-xs"
-                      onClick={() => setSelectedCurrencies(new Set())}
+                <Select
+                  value={currencyTypeFilter}
+                  onValueChange={(v) =>
+                    setCurrencyTypeFilter(
+                      v as "all" | "crypto" | "stable" | "fiat",
+                    )
+                  }
+                >
+                  <SelectTrigger className="w-[140px]">
+                    <SelectValue placeholder="Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="crypto">Crypto</SelectItem>
+                    <SelectItem value="stable">Stable</SelectItem>
+                    <SelectItem value="fiat">Fiat</SelectItem>
+                  </SelectContent>
+                </Select>
+                <div className="!min-w-full w-full basis-full sm:!min-w-0 sm:w-auto sm:basis-auto">
+                  <div className="flex w-full items-center gap-2 rounded-md border px-3 py-2">
+                    <Switch
+                      id="hide-zero"
+                      checked={hideZeroBalance}
+                      onCheckedChange={setHideZeroBalance}
+                    />
+                    <label
+                      htmlFor="hide-zero"
+                      className="text-muted-foreground cursor-pointer text-sm"
                     >
-                      Clear selection
-                    </Button>
+                      Hide zero balance
+                    </label>
                   </div>
-                )}
-                <CommandList>
-                  <CommandEmpty>No currency found.</CommandEmpty>
-                  <CommandGroup>
-                    {uniqueCurrencies.map(({ key, label }) => (
-                      <CommandItem key={key} value={label}>
-                        <div
-                          className="flex w-full items-center space-x-3 py-1"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Checkbox
-                            id={`currency-${key}`}
-                            checked={selectedCurrencies.has(key)}
-                            onCheckedChange={(checked) => {
-                              setSelectedCurrencies((prev) => {
-                                const next = new Set(prev);
-                                if (checked) {
-                                  next.add(key);
-                                } else {
-                                  next.delete(key);
-                                }
-                                return next;
-                              });
-                            }}
-                          />
-                          <label
-                            htmlFor={`currency-${key}`}
-                            className="cursor-pointer text-sm"
-                          >
-                            {label}
-                          </label>
-                        </div>
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline">
-                <PlusCircle className="size-4" />
-                Networks
-                {selectedNetworks.size > 0 && (
-                  <Badge variant="secondary" className="ml-1">
-                    {selectedNetworks.size}
-                  </Badge>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-52 p-0" align="start">
-              <Command>
-                <CommandInput
-                  placeholder="Search networks..."
-                  className="h-9"
-                />
-                {selectedNetworks.size > 0 && (
-                  <div className="border-b px-2 py-1.5">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 w-full justify-start text-xs"
-                      onClick={() => setSelectedNetworks(new Set())}
-                    >
-                      Clear selection
+                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline">
+                      <PlusCircle className="size-4" />
+                      Currencies
+                      {selectedCurrencies.size > 0 && (
+                        <Badge variant="secondary" className="ml-1">
+                          {selectedCurrencies.size}
+                        </Badge>
+                      )}
                     </Button>
-                  </div>
-                )}
-                <CommandList>
-                  <CommandEmpty>No network found.</CommandEmpty>
-                  <CommandGroup>
-                    {uniqueNetworks.map((network) => (
-                      <CommandItem key={network} value={network}>
-                        <div
-                          className="flex w-full items-center space-x-3 py-1"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Checkbox
-                            id={`network-${network}`}
-                            checked={selectedNetworks.has(network)}
-                            onCheckedChange={(checked) => {
-                              setSelectedNetworks((prev) => {
-                                const next = new Set(prev);
-                                if (checked) {
-                                  next.add(network);
-                                } else {
-                                  next.delete(network);
-                                }
-                                return next;
-                              });
-                            }}
-                          />
-                          <label
-                            htmlFor={`network-${network}`}
-                            className="cursor-pointer text-sm"
+                  </PopoverTrigger>
+                  <PopoverContent className="w-56 p-0" align="start">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search currencies..."
+                        className="h-9"
+                      />
+                      {selectedCurrencies.size > 0 && (
+                        <div className="border-b px-2 py-1.5">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 w-full justify-start text-xs"
+                            onClick={() => setSelectedCurrencies(new Set())}
                           >
-                            {network}
-                          </label>
+                            Clear selection
+                          </Button>
                         </div>
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </div>
+                      )}
+                      <CommandList>
+                        <CommandEmpty>No currency found.</CommandEmpty>
+                        <CommandGroup>
+                          {uniqueCurrencies.map(({ key, label }) => (
+                            <CommandItem key={key} value={label}>
+                              <div
+                                className="flex w-full items-center space-x-3 py-1"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Checkbox
+                                  id={`currency-${key}`}
+                                  checked={selectedCurrencies.has(key)}
+                                  onCheckedChange={(checked) => {
+                                    setSelectedCurrencies((prev) => {
+                                      const next = new Set(prev);
+                                      if (checked) {
+                                        next.add(key);
+                                      } else {
+                                        next.delete(key);
+                                      }
+                                      return next;
+                                    });
+                                  }}
+                                />
+                                <label
+                                  htmlFor={`currency-${key}`}
+                                  className="cursor-pointer text-sm"
+                                >
+                                  {label}
+                                </label>
+                              </div>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline">
+                      <PlusCircle className="size-4" />
+                      Networks
+                      {selectedNetworks.size > 0 && (
+                        <Badge variant="secondary" className="ml-1">
+                          {selectedNetworks.size}
+                        </Badge>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-52 p-0" align="start">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search networks..."
+                        className="h-9"
+                      />
+                      {selectedNetworks.size > 0 && (
+                        <div className="border-b px-2 py-1.5">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 w-full justify-start text-xs"
+                            onClick={() => setSelectedNetworks(new Set())}
+                          >
+                            Clear selection
+                          </Button>
+                        </div>
+                      )}
+                      <CommandList>
+                        <CommandEmpty>No network found.</CommandEmpty>
+                        <CommandGroup>
+                          {uniqueNetworks.map((network) => (
+                            <CommandItem key={network} value={network}>
+                              <div
+                                className="flex w-full items-center space-x-3 py-1"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Checkbox
+                                  id={`network-${network}`}
+                                  checked={selectedNetworks.has(network)}
+                                  onCheckedChange={(checked) => {
+                                    setSelectedNetworks((prev) => {
+                                      const next = new Set(prev);
+                                      if (checked) {
+                                        next.add(network);
+                                      } else {
+                                        next.delete(network);
+                                      }
+                                      return next;
+                                    });
+                                  }}
+                                />
+                                <label
+                                  htmlFor={`network-${network}`}
+                                  className="cursor-pointer text-sm"
+                                >
+                                  {network}
+                                </label>
+                              </div>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <div className="rounded-md">
           <Table>
             <TableHeader>
