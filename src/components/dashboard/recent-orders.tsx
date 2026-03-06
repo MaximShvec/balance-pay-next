@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 
 import { DotsIcon, FilterIcon } from "@/components/icons";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -629,7 +630,11 @@ export function RecentOrdersCard() {
           <Button
             variant="outline"
             size="icon"
-            className="rounded-full"
+            className={cn(
+              "rounded-full",
+              showFilters &&
+                "bg-accent text-accent-foreground dark:bg-input/50",
+            )}
             onClick={() => setShowFilters((v) => !v)}
             aria-label={showFilters ? "Hide filters" : "Show filters"}
           >
@@ -840,7 +845,14 @@ export function RecentOrdersCard() {
           )}
         </AnimatePresence>
         <div className="rounded-md">
-          <Table>
+          <Table className="[&_th:not(:last-child)]:min-w-[160px] [&_td:not(:last-child)]:min-w-[160px] md:[&_th]:min-w-0 md:[&_td]:min-w-0 md:table-fixed">
+            <colgroup>
+              <col className="md:w-[23%]" />
+              <col className="md:w-[23%]" />
+              <col className="md:w-[23%]" />
+              <col className="md:w-[23%]" />
+              <col className="md:w-[8%]" />
+            </colgroup>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -849,7 +861,7 @@ export function RecentOrdersCard() {
                       key={header.id}
                       className={
                         header.column.id === "actions"
-                          ? "w-20 text-right"
+                          ? "text-right"
                           : undefined
                       }
                     >
@@ -875,7 +887,7 @@ export function RecentOrdersCard() {
                       <TableCell
                         key={cell.id}
                         className={
-                          cell.column.id === "actions" ? "w-20" : undefined
+                          cell.column.id === "actions" ? "" : undefined
                         }
                       >
                         {flexRender(
