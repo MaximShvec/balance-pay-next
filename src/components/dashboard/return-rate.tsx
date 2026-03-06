@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import {
   Card,
   CardAction,
@@ -23,11 +23,12 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, Download } from "lucide-react";
 
 export function ReturnRateCard() {
+  const gradientId = useId().replace(/:/g, "");
   const [dateRange, setDateRange] = useState("this-week");
   const handleDateRangeChange = (value: string) => {
     setDateRange(value);
@@ -101,7 +102,7 @@ export function ReturnRateCard() {
             className="mt-0 !aspect-21/9 w-full md:mt-6"
             config={chartConfig}
           >
-            <LineChart
+            <AreaChart
               accessibilityLayer
               data={chartData}
               margin={{
@@ -110,6 +111,44 @@ export function ReturnRateCard() {
                 bottom: 0,
               }}
             >
+              <defs>
+                <linearGradient
+                  id={`${gradientId}-desktop`}
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop
+                    offset="0%"
+                    stopColor="var(--color-desktop)"
+                    stopOpacity={0.6}
+                  />
+                  <stop
+                    offset="70%"
+                    stopColor="var(--color-desktop)"
+                    stopOpacity={0}
+                  />
+                </linearGradient>
+                <linearGradient
+                  id={`${gradientId}-mobile`}
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop
+                    offset="0%"
+                    stopColor="var(--color-mobile)"
+                    stopOpacity={0.6}
+                  />
+                  <stop
+                    offset="70%"
+                    stopColor="var(--color-mobile)"
+                    stopOpacity={0}
+                  />
+                </linearGradient>
+              </defs>
               <CartesianGrid vertical={false} />
               <XAxis
                 dataKey="month"
@@ -120,24 +159,21 @@ export function ReturnRateCard() {
                 axisLine={false}
               />
               <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-              <Line
+              <Area
+                type="monotone"
                 dataKey="desktop"
                 stroke="var(--color-desktop)"
+                fill={`url(#${gradientId}-desktop)`}
                 strokeWidth={2}
-                dot={false}
               />
-              <Line
+              <Area
+                type="monotone"
                 dataKey="mobile"
                 stroke="var(--color-mobile)"
-                style={
-                  {
-                    opacity: 0.35,
-                  } as React.CSSProperties
-                }
+                fill={`url(#${gradientId}-mobile)`}
                 strokeWidth={2}
-                dot={false}
               />
-            </LineChart>
+            </AreaChart>
           </ChartContainer>
           <div
             className="text-muted-foreground mt-2 grid grid-cols-12 gap-0 text-center text-xs"

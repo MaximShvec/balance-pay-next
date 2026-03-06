@@ -57,7 +57,7 @@ export function NavMain() {
           {navItems.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
-                className="hover:text-foreground active:text-foreground hover:bg-[var(--primary)]/10 active:bg-[var(--primary)]/10"
+                className="hover:text-foreground active:text-foreground hover:bg-muted/60 active:bg-[var(--primary)]/10"
                 isActive={pathname === item.href}
                 tooltip={item.title}
                 asChild

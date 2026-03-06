@@ -356,14 +356,14 @@ const columns: ColumnDef<Order>[] = [
           <Image
             src={image}
             alt={name}
-            width={32}
-            height={32}
-            className="size-8 shrink-0"
+            width={40}
+            height={40}
+            className="size-10 shrink-0"
           />
           <div className="flex flex-col">
-            <span className="font-medium">{name}</span>
+            <span className="font-medium text-lg">{name}</span>
             {network && (
-              <span className="text-muted-foreground text-xs">{network}</span>
+              <span className="text-muted-foreground text-md">{network}</span>
             )}
           </div>
         </div>
@@ -401,8 +401,8 @@ const columns: ColumnDef<Order>[] = [
       }).format(balanceUsd);
       return (
         <div className="flex flex-col">
-          <span className="font-medium">{formattedUsd}</span>
-          <span className="text-muted-foreground text-xs">
+          <span className="font-medium text-lg">{formattedUsd}</span>
+          <span className="text-muted-foreground text-md">
             {formattedBalance} {asset.ticker}
           </span>
         </div>
@@ -439,8 +439,8 @@ const columns: ColumnDef<Order>[] = [
             }).format(priceUsd);
       return (
         <div className="flex flex-col">
-          <span className="font-medium">1 {asset.ticker}</span>
-          <span className="text-muted-foreground text-xs">{formattedUsd}</span>
+          <span className="font-medium text-lg">1 {asset.ticker}</span>
+          <span className="text-muted-foreground text-md">{formattedUsd}</span>
         </div>
       );
     },
@@ -462,11 +462,14 @@ const columns: ColumnDef<Order>[] = [
       const isPositive = value >= 0;
       const formatted = `${Math.abs(value).toFixed(1)}%`;
       return (
-        <Badge variant={isPositive ? "positive" : "negative"}>
+        <Badge
+          variant={isPositive ? "positive" : "negative"}
+          className="p-2 text-md"
+        >
           {isPositive ? (
-            <ArrowUp className="size-3" />
+            <ArrowUp className="size-4" />
           ) : (
-            <ArrowDown className="size-3" />
+            <ArrowDown className="size-4" />
           )}
           {formatted}
         </Badge>
@@ -716,7 +719,7 @@ export function AssetsTable() {
                         )
                       }
                     >
-                      <SelectTrigger className="w-full sm:w-[140px]">
+                      <SelectTrigger className="w-full sm:w-[140px] text-muted-foreground">
                         <SelectValue placeholder="Type" />
                       </SelectTrigger>
                       <SelectContent>
@@ -732,7 +735,7 @@ export function AssetsTable() {
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
-                          className="min-w-0 flex-1 sm:flex-initial"
+                          className="min-w-0 flex-1 sm:flex-initial text-muted-foreground"
                         >
                           <PlusCircle className="size-4 shrink-0" />
                           Currencies
@@ -803,7 +806,7 @@ export function AssetsTable() {
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
-                          className="min-w-0 flex-1 sm:flex-initial"
+                          className="min-w-0 flex-1 sm:flex-initial text-muted-foreground"
                         >
                           <PlusCircle className="size-4 shrink-0" />
                           Networks

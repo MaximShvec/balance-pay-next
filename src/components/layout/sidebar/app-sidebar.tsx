@@ -50,7 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="hover:text-foreground h-8 md:h-10 group-data-[collapsible=icon]:px-0! hover:bg-[var(--primary)]/5 cursor-pointer transition-colors duration-200">
+                <SidebarMenuButton className="hover:text-foreground h-12 group-data-[collapsible=icon]:px-0! hover:bg-muted cursor-pointer transition-colors duration-200 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0">
                   <Logo />
                   <span className="text-foreground font-semibold">
                     Balance Pay
