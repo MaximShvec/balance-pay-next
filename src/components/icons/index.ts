@@ -74,6 +74,7 @@ import MessageIcon from "@/assets/icons/message.svg";
 import MoveIcon from "@/assets/icons/move.svg";
 import NetworkIcon from "@/assets/icons/network.svg";
 import PayPalIcon from "@/assets/icons/pay-pal.svg";
+import PendingIcon from "@/assets/icons/pending.svg";
 import PhoneIcon from "@/assets/icons/phone.svg";
 import QuestionSquareBoldIcon from "@/assets/icons/question-square-bold.svg";
 import QuestionSquareOutlineIcon from "@/assets/icons/question-square-outline.svg";
@@ -102,6 +103,7 @@ import UserCircleOutlineIcon from "@/assets/icons/user-circle-outline.svg";
 import UserIcon from "@/assets/icons/user.svg";
 import UsersGroupBoldIcon from "@/assets/icons/users-group-bold.svg";
 import UsersGroupOutlineIcon from "@/assets/icons/users-group-outline.svg";
+import VerifiedIcon from "@/assets/icons/verified.svg";
 import WalletBoldIcon from "@/assets/icons/wallet-bold.svg";
 import WalletLinearIcon from "@/assets/icons/wallet-linear.svg";
 import WarningIcon from "@/assets/icons/warning.svg";
@@ -181,6 +183,7 @@ export {
   MoveIcon,
   NetworkIcon,
   PayPalIcon,
+  PendingIcon,
   PhoneIcon,
   QuestionSquareBoldIcon,
   QuestionSquareOutlineIcon,
@@ -209,6 +212,7 @@ export {
   UserIcon,
   UsersGroupBoldIcon,
   UsersGroupOutlineIcon,
+  VerifiedIcon,
   WalletBoldIcon,
   WalletLinearIcon,
   WarningIcon,

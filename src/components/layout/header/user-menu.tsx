@@ -16,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { VerifiedIcon } from "@/components/icons";
 
 export default function UserMenu() {
   return (
@@ -26,7 +27,7 @@ export default function UserMenu() {
       >
         <button
           type="button"
-          className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted/50 hover:bg-muted"
+          className="flex size-12 shrink-0 items-center justify-center rounded-full bg-muted/50 hover:bg-muted"
           aria-label="User menu"
         >
           <UserIcon className="size-5 text-muted-foreground" />
@@ -43,8 +44,8 @@ export default function UserMenu() {
               <AvatarFallback className="rounded-lg">TB</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">
-                Toby Belhome *(статус)
+              <span className="truncate font-semibold flex items-center gap-1">
+                Toby Belhome <VerifiedIcon className="size-4" />
               </span>
               <span className="text-muted-foreground truncate text-xs">
                 hello@tobybelhome.com

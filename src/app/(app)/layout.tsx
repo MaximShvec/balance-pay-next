@@ -21,7 +21,7 @@ export default async function AppLayout({
       defaultOpen={defaultOpen}
       style={
         {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--sidebar-width": "340px",
           "--content-padding": "calc(var(--spacing) * 4)",
           "--content-margin": "calc(var(--spacing) * 1.5)",
           "--content-full-height":
