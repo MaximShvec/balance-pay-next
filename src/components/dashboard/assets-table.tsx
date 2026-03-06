@@ -139,7 +139,7 @@ function exportOrdersToCsv(ordersToExport: Order[]): void {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `recent-orders-${new Date().toISOString().slice(0, 10)}.csv`;
+  link.download = `assets-table-${new Date().toISOString().slice(0, 10)}.csv`;
   link.click();
   URL.revokeObjectURL(url);
 }
@@ -505,7 +505,7 @@ function getCurrencyType(ticker: string): "fiat" | "stable" | "crypto" {
   return "crypto";
 }
 
-export function RecentOrdersCard() {
+export function AssetsTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],

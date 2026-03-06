@@ -5,7 +5,7 @@ import {
   StatCards,
   ChartProjectEfficiency,
   ReturnRateCard,
-  RecentOrdersCard,
+  AssetsTable,
 } from "@/components/dashboard";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 
@@ -27,7 +27,7 @@ function DashboardTabContent() {
         </div>
       </div>
       <div className="space-y-4 xl:grid xl:grid-cols-12 xl:gap-4 xl:space-y-0">
-        <RecentOrdersCard />
+        <AssetsTable />
       </div>
     </>
   );
