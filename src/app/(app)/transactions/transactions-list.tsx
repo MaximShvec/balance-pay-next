@@ -52,8 +52,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -68,19 +66,26 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Card,
   CardAction,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export type Transaction = {
   id: number;
@@ -192,7 +197,7 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       const { main, caption } = formatDateParts(row.getValue("date") as string);
       return (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-0.5">
           <span className="font-medium text-lg">{main}</span>
           <span className="text-muted-foreground text-md">{caption}</span>
         </div>
@@ -226,7 +231,7 @@ export const columns: ColumnDef<Transaction>[] = [
           <div className="flex size-10 shrink-0 items-center justify-center rounded-[12px] bg-muted">
             <Icon className="size-5" />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-0.5">
             <span className="font-medium text-lg capitalize">{type}</span>
             <span className="text-muted-foreground text-md capitalize">
               {typeSub}
@@ -250,7 +255,7 @@ export const columns: ColumnDef<Transaction>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-0.5">
         <span className="font-medium text-lg">{row.original.method}</span>
         <span className="text-muted-foreground text-md">
           {row.original.route}
@@ -272,7 +277,7 @@ export const columns: ColumnDef<Transaction>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-0.5">
         <span className="font-medium text-lg">{row.original.from}</span>
         <span className="text-muted-foreground text-md">{row.original.to}</span>
       </div>
@@ -298,7 +303,7 @@ export const columns: ColumnDef<Transaction>[] = [
         true,
       );
       return (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-0.5">
           <span
             className={
               main !== "-"
@@ -336,7 +341,7 @@ export const columns: ColumnDef<Transaction>[] = [
         false,
       );
       return (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-0.5">
           <span
             className={
               main !== "-"
@@ -374,7 +379,7 @@ export const columns: ColumnDef<Transaction>[] = [
         true,
       );
       return (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-0.5">
           <span className="font-medium text-lg">{main}</span>
           {caption && (
             <span className="text-muted-foreground text-md">{caption}</span>
@@ -440,7 +445,7 @@ export const columns: ColumnDef<Transaction>[] = [
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="h-8 w-8 p-0 cursor-pointer transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="h-8 w-8 p-0 cursor-pointer transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
             >
               <span className="sr-only">Open menu</span>
               <DotsIcon className="size-4" />
@@ -468,13 +473,21 @@ export default function TransactionsList({ data }: { data: Transaction[] }) {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [showFilters, setShowFilters] = React.useState(false);
+  const [openFiltersSheet, setOpenFiltersSheet] = React.useState(false);
+  const isMobile = useIsMobile();
+
+  React.useEffect(() => {
+    if (!isMobile) setOpenFiltersSheet(false);
+  }, [isMobile]);
   const [selectedStatuses, setSelectedStatuses] = React.useState<Set<string>>(
     new Set(),
   );
   const [selectedTypes, setSelectedTypes] = React.useState<Set<string>>(
     new Set(),
   );
-  const [methodFilter, setMethodFilter] = React.useState<string>("all");
+  const [selectedMethods, setSelectedMethods] = React.useState<Set<string>>(
+    new Set(),
+  );
   const [{ pageIndex, pageSize }, setPagination] =
     React.useState<PaginationState>({
       pageIndex: 0,
@@ -489,12 +502,13 @@ export default function TransactionsList({ data }: { data: Transaction[] }) {
       if (selectedTypes.size > 0 && !selectedTypes.has(t.type.toLowerCase())) {
         return false;
       }
-      if (methodFilter !== "all" && t.method.toLowerCase() !== methodFilter) {
-        return false;
+      if (selectedMethods.size > 0) {
+        const methodKey = t.method.toLowerCase().replace(/\s+/g, " ");
+        if (!selectedMethods.has(methodKey)) return false;
       }
       return true;
     });
-  }, [data, selectedStatuses, selectedTypes, methodFilter]);
+  }, [data, selectedStatuses, selectedTypes, selectedMethods]);
 
   const pagination = React.useMemo(
     () => ({ pageIndex, pageSize }),
@@ -543,11 +557,23 @@ export default function TransactionsList({ data }: { data: Transaction[] }) {
             size="icon"
             className={cn(
               "rounded-full",
-              showFilters &&
+              (isMobile ? openFiltersSheet : showFilters) &&
                 "bg-accent text-accent-foreground dark:bg-input/50",
             )}
-            onClick={() => setShowFilters((v) => !v)}
-            aria-label={showFilters ? "Hide filters" : "Show filters"}
+            onClick={() =>
+              isMobile
+                ? setOpenFiltersSheet((v) => !v)
+                : setShowFilters((v) => !v)
+            }
+            aria-label={
+              isMobile
+                ? openFiltersSheet
+                  ? "Close filters"
+                  : "Open filters"
+                : showFilters
+                  ? "Hide filters"
+                  : "Show filters"
+            }
           >
             <FilterIcon className="size-4" />
           </Button>
@@ -589,8 +615,20 @@ export default function TransactionsList({ data }: { data: Transaction[] }) {
         </CardAction>
       </CardHeader>
       <CardContent className="min-w-0 space-y-4 px-0">
+        {isMobile && (
+          <Input
+            placeholder="Search transactions..."
+            value={
+              (table.getColumn("reference")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn("reference")?.setFilterValue(event.target.value)
+            }
+            className="w-full"
+          />
+        )}
         <AnimatePresence initial={false}>
-          {showFilters && (
+          {showFilters && !isMobile && (
             <motion.div
               key="filters"
               initial={{ height: 0, opacity: 0 }}
@@ -599,22 +637,24 @@ export default function TransactionsList({ data }: { data: Transaction[] }) {
               transition={{ duration: 0.2, ease: "easeInOut" }}
               className="min-w-0 overflow-hidden p-1 -m-1 mb-2"
             >
-              <div className="flex min-w-0 flex-wrap items-center gap-2">
-                <Input
-                  placeholder="Search transactions..."
-                  value={
-                    (table
-                      .getColumn("reference")
-                      ?.getFilterValue() as string) ?? ""
-                  }
-                  onChange={(event) =>
-                    table
-                      .getColumn("reference")
-                      ?.setFilterValue(event.target.value)
-                  }
-                  className="min-w-[120px] flex-1"
-                />
-                <div className="flex min-w-0 w-full shrink items-center gap-2 flex-wrap sm:w-auto sm:shrink-0 sm:flex-nowrap">
+              <div className="flex min-w-0 w-full flex-wrap items-center gap-2">
+                <div className="flex min-w-0 w-full shrink items-center gap-2 flex-wrap sm:flex-nowrap">
+                  <div className="order-0 min-w-0 w-full basis-full shrink-0 sm:flex-1 sm:basis-0">
+                    <Input
+                      placeholder="Search transactions..."
+                      value={
+                        (table
+                          .getColumn("reference")
+                          ?.getFilterValue() as string) ?? ""
+                      }
+                      onChange={(event) =>
+                        table
+                          .getColumn("reference")
+                          ?.setFilterValue(event.target.value)
+                      }
+                      className="min-w-[120px] w-full"
+                    />
+                  </div>
                   <div className="order-2 flex min-w-0 w-full basis-full gap-2 sm:order-0 sm:w-auto sm:basis-auto">
                     <Popover>
                       <PopoverTrigger asChild>
@@ -696,7 +736,7 @@ export default function TransactionsList({ data }: { data: Transaction[] }) {
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
-                          className="min-w-0 flex-1 sm:flex-initial text-muted-foreground"
+                          className="min-w-0 flex-1 sm:flex-initial text-muted-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
                         >
                           <PlusCircle className="size-4 shrink-0" />
                           Type
@@ -768,27 +808,253 @@ export default function TransactionsList({ data }: { data: Transaction[] }) {
                     </Popover>
                   </div>
                   <div className="order-3 w-full basis-full sm:order-0 sm:w-auto sm:basis-auto shrink-0">
-                    <Select
-                      value={methodFilter}
-                      onValueChange={setMethodFilter}
-                    >
-                      <SelectTrigger className="w-full sm:w-[140px] text-muted-foreground">
-                        <SelectValue placeholder="Method" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                        <SelectItem value="iban">IBAN</SelectItem>
-                        <SelectItem value="balance pay">Balance Pay</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="min-w-0 flex-1 sm:flex-initial text-muted-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
+                        >
+                          <PlusCircle className="size-4 shrink-0" />
+                          Method
+                          {selectedMethods.size > 0 && (
+                            <Badge variant="secondary" className="ml-1">
+                              {selectedMethods.size}
+                            </Badge>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-52 p-0" align="start">
+                        <Command>
+                          <CommandInput
+                            placeholder="Search method..."
+                            className="h-9"
+                          />
+                          {selectedMethods.size > 0 && (
+                            <div className="border-b px-2 py-1.5">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 w-full justify-start text-xs"
+                                onClick={() => setSelectedMethods(new Set())}
+                              >
+                                Clear selection
+                              </Button>
+                            </div>
+                          )}
+                          <CommandList>
+                            <CommandEmpty>No method found.</CommandEmpty>
+                            <CommandGroup>
+                              {[
+                                { value: "iban", label: "IBAN" },
+                                { value: "balance pay", label: "Balance Pay" },
+                              ].map((method) => (
+                                <CommandItem
+                                  key={method.value}
+                                  value={method.value}
+                                >
+                                  <div
+                                    className="flex w-full items-center space-x-3 py-1"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <Checkbox
+                                      id={`method-${method.value}`}
+                                      checked={selectedMethods.has(
+                                        method.value,
+                                      )}
+                                      onCheckedChange={(checked) => {
+                                        setSelectedMethods((prev) => {
+                                          const next = new Set(prev);
+                                          if (checked) {
+                                            next.add(method.value);
+                                          } else {
+                                            next.delete(method.value);
+                                          }
+                                          return next;
+                                        });
+                                      }}
+                                    />
+                                    <label
+                                      htmlFor={`method-${method.value}`}
+                                      className="cursor-pointer text-sm"
+                                    >
+                                      {method.label}
+                                    </label>
+                                  </div>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
+        <Sheet open={openFiltersSheet} onOpenChange={setOpenFiltersSheet}>
+          <SheetContent
+            side="bottom"
+            className="max-h-[85vh] overflow-y-auto rounded-t-sm px-4"
+          >
+            <div className="mx-auto mb-2 h-1.5 w-12 shrink-0 rounded-full bg-muted-foreground/20" />
+            <SheetHeader className="px-0">
+              <SheetTitle>Filters</SheetTitle>
+            </SheetHeader>
+            <Accordion
+              type="multiple"
+              defaultValue={["status", "type", "method"]}
+              className="w-full"
+            >
+              <AccordionItem value="status">
+                <AccordionTrigger className="py-4">
+                  Status
+                  {selectedStatuses.size > 0 && (
+                    <Badge variant="secondary" className="mr-auto">
+                      {selectedStatuses.size}
+                    </Badge>
+                  )}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-2">
+                    {statuses.map((status) => (
+                      <div
+                        key={status.value}
+                        className="flex items-center space-x-3"
+                      >
+                        <Checkbox
+                          id={`sheet-status-${status.value}`}
+                          checked={selectedStatuses.has(status.value)}
+                          onCheckedChange={(checked) => {
+                            setSelectedStatuses((prev) => {
+                              const next = new Set(prev);
+                              if (checked) {
+                                next.add(status.value);
+                              } else {
+                                next.delete(status.value);
+                              }
+                              return next;
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor={`sheet-status-${status.value}`}
+                          className="cursor-pointer text-sm"
+                        >
+                          {status.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="type">
+                <AccordionTrigger className="py-4">
+                  Type
+                  {selectedTypes.size > 0 && (
+                    <Badge variant="secondary" className="mr-auto">
+                      {selectedTypes.size}
+                    </Badge>
+                  )}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-2">
+                    {types.map((type) => (
+                      <div
+                        key={type.value}
+                        className="flex items-center space-x-3"
+                      >
+                        <Checkbox
+                          id={`sheet-type-${type.value}`}
+                          checked={selectedTypes.has(type.value)}
+                          onCheckedChange={(checked) => {
+                            setSelectedTypes((prev) => {
+                              const next = new Set(prev);
+                              if (checked) {
+                                next.add(type.value);
+                              } else {
+                                next.delete(type.value);
+                              }
+                              return next;
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor={`sheet-type-${type.value}`}
+                          className="cursor-pointer text-sm"
+                        >
+                          {type.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="method">
+                <AccordionTrigger className="py-4">
+                  Method
+                  {selectedMethods.size > 0 && (
+                    <Badge variant="secondary" className="mr-auto">
+                      {selectedMethods.size}
+                    </Badge>
+                  )}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-2">
+                    {[
+                      { value: "iban", label: "IBAN" },
+                      { value: "balance pay", label: "Balance Pay" },
+                    ].map((method) => (
+                      <div
+                        key={method.value}
+                        className="flex items-center space-x-3"
+                      >
+                        <Checkbox
+                          id={`sheet-method-${method.value}`}
+                          checked={selectedMethods.has(method.value)}
+                          onCheckedChange={(checked) => {
+                            setSelectedMethods((prev) => {
+                              const next = new Set(prev);
+                              if (checked) {
+                                next.add(method.value);
+                              } else {
+                                next.delete(method.value);
+                              }
+                              return next;
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor={`sheet-method-${method.value}`}
+                          className="cursor-pointer text-sm"
+                        >
+                          {method.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+            <SheetFooter>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  setSelectedStatuses(new Set());
+                  setSelectedTypes(new Set());
+                  setSelectedMethods(new Set());
+                  setOpenFiltersSheet(false);
+                }}
+              >
+                Reset filters
+              </Button>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
         <div className="rounded-md">
-          <Table>
+          <Table className="max-md:[&_td]:!py-4 max-md:[&_td]:!px-4 max-md:[&_th]:!py-2 max-md:[&_th]:!px-4 max-md:[&_td:first-child]:!pl-0 max-md:[&_th:first-child]:!pl-0 md:[&_td]:!py-4 md:[&_th]:!py-4">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>

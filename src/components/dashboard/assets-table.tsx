@@ -22,6 +22,7 @@ import {
   ChevronRight,
   PlusCircle,
 } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import {
   AssetIcon,
@@ -83,6 +84,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AnimatePresence, motion } from "motion/react";
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export type Order = {
   id: number;
@@ -489,7 +503,7 @@ const columns: ColumnDef<Order>[] = [
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="h-8 w-8 p-0 cursor-pointer transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="h-8 w-8 p-0 cursor-pointer transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
               >
                 <span className="sr-only">Open menu</span>
                 <DotsIcon className="size-4" />
@@ -553,6 +567,12 @@ export function AssetsTable() {
     new Set(),
   );
   const [showFilters, setShowFilters] = React.useState(false);
+  const [openFiltersSheet, setOpenFiltersSheet] = React.useState(false);
+  const isMobile = useIsMobile();
+
+  React.useEffect(() => {
+    if (!isMobile) setOpenFiltersSheet(false);
+  }, [isMobile]);
 
   const uniqueCurrencies = React.useMemo(() => {
     const seen = new Set<string>();
@@ -655,11 +675,23 @@ export function AssetsTable() {
             size="icon"
             className={cn(
               "rounded-full",
-              showFilters &&
+              (isMobile ? openFiltersSheet : showFilters) &&
                 "bg-accent text-accent-foreground dark:bg-input/50",
             )}
-            onClick={() => setShowFilters((v) => !v)}
-            aria-label={showFilters ? "Hide filters" : "Show filters"}
+            onClick={() =>
+              isMobile
+                ? setOpenFiltersSheet((v) => !v)
+                : setShowFilters((v) => !v)
+            }
+            aria-label={
+              isMobile
+                ? openFiltersSheet
+                  ? "Close filters"
+                  : "Open filters"
+                : showFilters
+                  ? "Hide filters"
+                  : "Show filters"
+            }
           >
             <FilterIcon className="size-4" />
           </Button>
@@ -673,8 +705,18 @@ export function AssetsTable() {
         </CardAction>
       </CardHeader>
       <CardContent className="min-w-0 space-y-4 px-0">
+        {isMobile && (
+          <Input
+            placeholder="Filter assets..."
+            value={(table.getColumn("asset")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("asset")?.setFilterValue(event.target.value)
+            }
+            className="w-full"
+          />
+        )}
         <AnimatePresence initial={false}>
-          {showFilters && (
+          {showFilters && !isMobile && (
             <motion.div
               key="filters"
               initial={{ height: 0, opacity: 0 }}
@@ -683,18 +725,18 @@ export function AssetsTable() {
               transition={{ duration: 0.2, ease: "easeInOut" }}
               className="min-w-0 overflow-hidden p-1 -m-1 mb-2"
             >
-              <div className="flex min-w-0 flex-wrap items-center gap-2">
-                <Input
-                  placeholder="Filter assets..."
-                  value={
-                    (table.getColumn("asset")?.getFilterValue() as string) ?? ""
-                  }
-                  onChange={(event) =>
-                    table.getColumn("asset")?.setFilterValue(event.target.value)
-                  }
-                  className="min-w-[120px] flex-1"
-                />
-                <div className="flex min-w-0 w-full shrink items-center gap-2 flex-wrap sm:w-auto sm:shrink-0 sm:flex-nowrap">
+              <div className="flex min-w-0 w-full flex-wrap items-center gap-2">
+                <div className="flex min-w-0 w-full shrink items-center gap-2 flex-wrap sm:flex-nowrap">
+                  <div className="order-0 min-w-0 w-full basis-full shrink-0 sm:flex-1 sm:basis-0">
+                    <Input
+                      placeholder="Filter assets..."
+                      value={(table.getColumn("asset")?.getFilterValue() as string) ?? ""}
+                      onChange={(event) =>
+                        table.getColumn("asset")?.setFilterValue(event.target.value)
+                      }
+                      className="min-w-[120px] w-full"
+                    />
+                  </div>
                   <div className="order-1 w-full basis-full sm:order-0 sm:w-auto sm:basis-auto shrink-0">
                     <div className="flex w-full items-center gap-2 rounded-md border px-3 py-2">
                       <Switch
@@ -879,8 +921,187 @@ export function AssetsTable() {
             </motion.div>
           )}
         </AnimatePresence>
+        <Sheet open={openFiltersSheet} onOpenChange={setOpenFiltersSheet}>
+          <SheetContent
+            side="bottom"
+            className="max-h-[85vh] overflow-y-auto rounded-t-sm px-4"
+          >
+            <div className="mx-auto mb-2 h-1.5 w-12 shrink-0 rounded-full bg-muted-foreground/20" />
+            <SheetHeader>
+              <SheetTitle>Filters</SheetTitle>
+            </SheetHeader>
+            <Accordion
+              type="multiple"
+              defaultValue={["hide-zero", "type", "currencies", "networks"]}
+              className="w-full"
+            >
+              <AccordionItem value="hide-zero">
+                <AccordionTrigger className="py-4">
+                  Hide zero balance
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      id="sheet-hide-zero"
+                      checked={hideZeroBalance}
+                      onCheckedChange={setHideZeroBalance}
+                    />
+                    <label
+                      htmlFor="sheet-hide-zero"
+                      className="text-muted-foreground cursor-pointer text-sm"
+                    >
+                      Hide zero balance
+                    </label>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="type">
+                <AccordionTrigger className="py-4">
+                  Type
+                  {currencyTypeFilter !== "all" && (
+                    <Badge variant="secondary" className="mr-auto">
+                      1
+                    </Badge>
+                  )}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-2">
+                    {[
+                      { value: "all", label: "All" },
+                      { value: "crypto", label: "Crypto" },
+                      { value: "stable", label: "Stable" },
+                      { value: "fiat", label: "Fiat" },
+                    ].map((type) => (
+                      <div
+                        key={type.value}
+                        className="flex items-center space-x-3"
+                      >
+                        <Checkbox
+                          id={`sheet-type-${type.value}`}
+                          checked={currencyTypeFilter === type.value}
+                          onCheckedChange={(checked) =>
+                            checked &&
+                            setCurrencyTypeFilter(
+                              type.value as
+                                | "all"
+                                | "crypto"
+                                | "stable"
+                                | "fiat",
+                            )
+                          }
+                        />
+                        <label
+                          htmlFor={`sheet-type-${type.value}`}
+                          className="cursor-pointer text-sm"
+                        >
+                          {type.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="currencies">
+                <AccordionTrigger className="py-4">
+                  Currencies
+                  {selectedCurrencies.size > 0 && (
+                    <Badge variant="secondary" className="mr-auto">
+                      {selectedCurrencies.size}
+                    </Badge>
+                  )}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-2">
+                    {uniqueCurrencies.map(({ key, label }) => (
+                      <div key={key} className="flex items-center space-x-3">
+                        <Checkbox
+                          id={`sheet-currency-${key}`}
+                          checked={selectedCurrencies.has(key)}
+                          onCheckedChange={(checked) => {
+                            setSelectedCurrencies((prev) => {
+                              const next = new Set(prev);
+                              if (checked) {
+                                next.add(key);
+                              } else {
+                                next.delete(key);
+                              }
+                              return next;
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor={`sheet-currency-${key}`}
+                          className="cursor-pointer text-sm"
+                        >
+                          {label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="networks">
+                <AccordionTrigger className="py-4">
+                  Networks
+                  {selectedNetworks.size > 0 && (
+                    <Badge variant="secondary" className="mr-auto">
+                      {selectedNetworks.size}
+                    </Badge>
+                  )}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-2">
+                    {uniqueNetworks.map((network) => (
+                      <div
+                        key={network}
+                        className="flex items-center space-x-3"
+                      >
+                        <Checkbox
+                          id={`sheet-network-${network}`}
+                          checked={selectedNetworks.has(network)}
+                          onCheckedChange={(checked) => {
+                            setSelectedNetworks((prev) => {
+                              const next = new Set(prev);
+                              if (checked) {
+                                next.add(network);
+                              } else {
+                                next.delete(network);
+                              }
+                              return next;
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor={`sheet-network-${network}`}
+                          className="cursor-pointer text-sm"
+                        >
+                          {network}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+            <SheetFooter>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  setCurrencyTypeFilter("all");
+                  setHideZeroBalance(false);
+                  setSelectedCurrencies(new Set());
+                  setSelectedNetworks(new Set());
+                  setOpenFiltersSheet(false);
+                }}
+              >
+                Reset filters
+              </Button>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
         <div className="rounded-md">
-          <Table className="[&_th:not(:last-child)]:min-w-[160px] [&_td:not(:last-child)]:min-w-[160px] md:[&_th]:min-w-0 md:[&_td]:min-w-0 md:table-fixed">
+          <Table className="[&_th:not(:last-child)]:min-w-[160px] [&_td:not(:last-child)]:min-w-[160px] md:[&_th]:min-w-0 md:[&_td]:min-w-0 md:table-fixed max-md:[&_td]:!py-4 max-md:[&_td]:!px-4 max-md:[&_th]:!py-2 max-md:[&_th]:!px-4 max-md:[&_td:first-child]:!pl-0 max-md:[&_th:first-child]:!pl-0 md:[&_td]:!py-4 md:[&_th]:!py-4">
             <colgroup>
               <col className="md:w-[23%]" />
               <col className="md:w-[23%]" />
