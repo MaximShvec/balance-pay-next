@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import TransactionsList from "@/app/(app)/transactions/transactions-list";
+import TransactionsList from "@/components/transactions/transactions-list";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateMeta({
