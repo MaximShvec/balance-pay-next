@@ -6,28 +6,34 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import { Metadata } from "next";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardAction, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import ProductList from "@/app/(app)/transactions/product-list";
+import TransactionsList from "@/app/(app)/transactions/transactions-list";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateMeta({
-    title: "Product List",
+    title: "Transactions",
     description:
-      "Product list page created using Tanstack Table. List or filter products. Built with shadcn/ui, Tailwind CSS and Next.js.",
-    canonical: "/transactions"
+      "Transactions list page. View and filter your transaction history.",
+    canonical: "/transactions",
   });
 }
 
-async function getProducts() {
+async function getTransactions() {
   const data = await fs.readFile(
-    path.join(process.cwd(), "src/app/(app)/transactions/data.json")
+    path.join(process.cwd(), "src/app/(app)/transactions/data.json"),
   );
   return JSON.parse(data.toString());
 }
 
 export default async function Page() {
-  const products = await getProducts();
+  const transactions = await getTransactions();
 
   return (
     <div className="space-y-4">
@@ -42,7 +48,9 @@ export default async function Page() {
         <Card>
           <CardHeader>
             <CardDescription>Total Sales</CardDescription>
-            <CardTitle className="font-display text-2xl lg:text-3xl">$30,230</CardTitle>
+            <CardTitle className="font-display text-2xl lg:text-3xl">
+              $30,230
+            </CardTitle>
             <CardAction>
               <Badge variant="outline">
                 <span className="text-green-600">+20.1%</span>
@@ -53,7 +61,9 @@ export default async function Page() {
         <Card>
           <CardHeader>
             <CardDescription>Number of Sales</CardDescription>
-            <CardTitle className="font-display text-2xl lg:text-3xl">982</CardTitle>
+            <CardTitle className="font-display text-2xl lg:text-3xl">
+              982
+            </CardTitle>
             <CardAction>
               <Badge variant="outline">
                 <span className="text-green-600">+5.02</span>
@@ -64,7 +74,9 @@ export default async function Page() {
         <Card>
           <CardHeader>
             <CardDescription>Affiliate</CardDescription>
-            <CardTitle className="font-display text-2xl lg:text-3xl">$4,530</CardTitle>
+            <CardTitle className="font-display text-2xl lg:text-3xl">
+              $4,530
+            </CardTitle>
             <CardAction>
               <Badge variant="outline">
                 <span className="text-green-600">+3.1%</span>
@@ -75,7 +87,9 @@ export default async function Page() {
         <Card>
           <CardHeader>
             <CardDescription>Discounts</CardDescription>
-            <CardTitle className="font-display text-2xl lg:text-3xl">$2,230</CardTitle>
+            <CardTitle className="font-display text-2xl lg:text-3xl">
+              $2,230
+            </CardTitle>
             <CardAction>
               <Badge variant="outline">
                 <span className="text-red-600">-3.58%</span>
@@ -85,7 +99,7 @@ export default async function Page() {
         </Card>
       </div>
       <div className="pt-4">
-        <ProductList data={products} />
+        <TransactionsList data={transactions} />
       </div>
     </div>
   );

@@ -735,7 +735,7 @@ export function AssetsTable() {
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
-                          className="min-w-0 flex-1 sm:flex-initial text-muted-foreground"
+                          className="min-w-0 flex-1 sm:flex-initial text-muted-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
                         >
                           <PlusCircle className="size-4 shrink-0" />
                           Currencies
@@ -806,7 +806,7 @@ export function AssetsTable() {
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
-                          className="min-w-0 flex-1 sm:flex-initial text-muted-foreground"
+                          className="min-w-0 flex-1 sm:flex-initial text-muted-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
                         >
                           <PlusCircle className="size-4 shrink-0" />
                           Networks
