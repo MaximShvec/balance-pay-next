@@ -12,9 +12,9 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 function DashboardTabContent() {
   return (
     <>
-      <div className="grid gap-4 xl:grid-cols-12">
+      <div className="grid gap-4 2xl:grid-cols-12">
         <WelcomeCard />
-        <div className="md:col-span-12 xl:col-span-8">
+        <div className="md:col-span-12 2xl:col-span-8">
           <StatCards />
         </div>
       </div>

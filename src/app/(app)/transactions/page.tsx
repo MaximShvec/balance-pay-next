@@ -1,11 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { generateMeta } from "@/lib/utils";
-import Link from "next/link";
-import { PlusIcon } from "@radix-ui/react-icons";
 import { Metadata } from "next";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -37,14 +34,7 @@ export default async function Page() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-end space-y-2">
-        <Button asChild>
-          <Link href="/dashboard/pages/products/create">
-            <PlusIcon /> Add Product
-          </Link>
-        </Button>
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-4">
         <Card>
           <CardHeader>
             <CardDescription>Total Sales</CardDescription>

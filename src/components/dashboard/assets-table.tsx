@@ -355,7 +355,7 @@ const columns: ColumnDef<Order>[] = [
     accessorFn: (row) => row.asset.name,
     header: ({ column }) => (
       <Button
-        className="-ml-3"
+        className="!pl-0"
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
@@ -1101,7 +1101,7 @@ export function AssetsTable() {
           </SheetContent>
         </Sheet>
         <div className="rounded-md">
-          <Table className="[&_th:not(:last-child)]:min-w-[160px] [&_td:not(:last-child)]:min-w-[160px] md:[&_th]:min-w-0 md:[&_td]:min-w-0 md:table-fixed max-md:[&_td]:!py-4 max-md:[&_td]:!px-4 max-md:[&_th]:!py-2 max-md:[&_th]:!px-4 max-md:[&_td:first-child]:!pl-0 max-md:[&_th:first-child]:!pl-0 md:[&_td]:!py-4 md:[&_th]:!py-4">
+          <Table className="[&_th:not(:last-child)]:min-w-[160px] [&_td:not(:last-child)]:min-w-[160px] md:[&_th]:min-w-0 md:[&_td]:min-w-0 md:table-fixed">
             <colgroup>
               <col className="md:w-[23%]" />
               <col className="md:w-[23%]" />

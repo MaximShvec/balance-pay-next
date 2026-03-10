@@ -183,38 +183,11 @@ function exportTransactionsToCsv(transactions: Transaction[]): void {
 
 export const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "date",
-    header: ({ column }) => (
-      <Button
-        className="-ml-3"
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Date
-        <ArrowUpDown className="size-3" />
-      </Button>
-    ),
-    cell: ({ row }) => {
-      const { main, caption } = formatDateParts(row.getValue("date") as string);
-      return (
-        <div className="flex flex-col gap-0.5">
-          <span className="font-medium text-lg">{main}</span>
-          <span className="text-muted-foreground text-md">{caption}</span>
-        </div>
-      );
-    },
-    sortingFn: (rowA, rowB, columnId) => {
-      const a = new Date(rowA.getValue(columnId) as string).getTime();
-      const b = new Date(rowB.getValue(columnId) as string).getTime();
-      return a - b;
-    },
-  },
-  {
     id: "type",
     accessorFn: (row) => `${row.type} ${row.typeSub}`,
     header: ({ column }) => (
       <Button
-        className="-ml-3"
+        className="!pl-0"
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
@@ -435,6 +408,33 @@ export const columns: ColumnDef<Transaction>[] = [
     ),
   },
   {
+    accessorKey: "date",
+    header: ({ column }) => (
+      <Button
+        className="-ml-3"
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Date
+        <ArrowUpDown className="size-3" />
+      </Button>
+    ),
+    cell: ({ row }) => {
+      const { main, caption } = formatDateParts(row.getValue("date") as string);
+      return (
+        <div className="flex flex-col gap-0.5">
+          <span className="font-medium text-lg">{main}</span>
+          <span className="text-muted-foreground text-md">{caption}</span>
+        </div>
+      );
+    },
+    sortingFn: (rowA, rowB, columnId) => {
+      const a = new Date(rowA.getValue(columnId) as string).getTime();
+      const b = new Date(rowB.getValue(columnId) as string).getTime();
+      return a - b;
+    },
+  },
+  {
     id: "actions",
     header: "Action",
     enableHiding: false,
@@ -471,7 +471,11 @@ export default function TransactionsList({ data }: { data: Transaction[] }) {
     [],
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+    React.useState<VisibilityState>({
+      fromTo: false,
+      fee: false,
+      reference: false,
+    });
   const [showFilters, setShowFilters] = React.useState(false);
   const [openFiltersSheet, setOpenFiltersSheet] = React.useState(false);
   const isMobile = useIsMobile();
@@ -545,6 +549,11 @@ export default function TransactionsList({ data }: { data: Transaction[] }) {
     { value: "deposit", label: "Deposit" },
     { value: "withdraw", label: "Withdraw" },
     { value: "send", label: "Send" },
+    { value: "receive", label: "Receive" },
+    { value: "buy", label: "Buy" },
+    { value: "sell", label: "Sell" },
+    { value: "exchange", label: "Exchange" },
+    { value: "move", label: "Move" },
   ];
 
   return (
@@ -595,7 +604,7 @@ export default function TransactionsList({ data }: { data: Transaction[] }) {
                 .map((column) => (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize"
+                    className="capitalize cursor-pointer transition-all duration-200"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) => column.toggleVisibility(value)}
                   >
@@ -1054,7 +1063,7 @@ export default function TransactionsList({ data }: { data: Transaction[] }) {
           </SheetContent>
         </Sheet>
         <div className="rounded-md">
-          <Table className="max-md:[&_td]:!py-4 max-md:[&_td]:!px-4 max-md:[&_th]:!py-2 max-md:[&_th]:!px-4 max-md:[&_td:first-child]:!pl-0 max-md:[&_th:first-child]:!pl-0 md:[&_td]:!py-4 md:[&_th]:!py-4">
+          <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>

@@ -29,7 +29,7 @@ export function SiteHeader() {
         </Button>
         <Separator
           orientation="vertical"
-          className="mx-2 hidden md:block min-[1200px]:hidden data-[orientation=vertical]:h-4"
+          className="mr-2 block min-[1200px]:hidden data-[orientation=vertical]:h-4"
         />
 
         <HeaderTitleSlot />

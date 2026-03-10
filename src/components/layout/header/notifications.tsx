@@ -30,7 +30,7 @@ const Notifications = () => {
         <Button
           size="icon"
           variant="ghost"
-          className="relative size-12 rounded-full bg-muted/50 hover:bg-muted"
+          className="relative size-12 rounded-full bg-muted/50 hover:bg-muted focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
         >
           <BellOutlineIcon className="size-5 text-muted-foreground" />
           <span className="bg-destructive absolute end-0.5 top-0.5 block size-1.5 shrink-0 rounded-full"></span>

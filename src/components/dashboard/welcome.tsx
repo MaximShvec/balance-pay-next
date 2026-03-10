@@ -11,7 +11,7 @@ import {
 
 export function WelcomeCard() {
   return (
-    <Card className="bg-[var(--base-200)] relative overflow-hidden md:col-span-12 xl:col-span-4">
+    <Card className="bg-[var(--base-200)] relative overflow-hidden md:col-span-12 2xl:col-span-4">
       <CardHeader>
         <CardTitle className="text-2xl">Congratulations Maksim! 🎉</CardTitle>
         <CardDescription>Your total balance today is</CardDescription>

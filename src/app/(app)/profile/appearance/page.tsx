@@ -33,6 +33,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTheme } from "next-themes";
+import { useEffect } from "react";
 
 const languages = [
   { label: "English", value: "en" },
@@ -63,12 +64,21 @@ const defaultValues: Partial<AppearanceFormValues> = {
 };
 
 export default function Page() {
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      theme: (theme as "light" | "dark") || "light",
+    },
   });
+
+  useEffect(() => {
+    if (theme) {
+      form.setValue("theme", theme as "light" | "dark");
+    }
+  }, [theme, form]);
 
   function onSubmit(data: AppearanceFormValues) {
     toast("You submitted the following values:", {
@@ -167,7 +177,7 @@ export default function Page() {
                     className="flex max-w-md gap-6 pt-2"
                   >
                     <FormItem>
-                      <FormLabel className="[&:has([data-state=checked])>div]:border-primary flex-col">
+                      <FormLabel className="[&:has([data-state=checked])>div]:border-primary flex-col cursor-pointer">
                         <FormControl>
                           <RadioGroupItem value="light" className="sr-only" />
                         </FormControl>
@@ -193,7 +203,7 @@ export default function Page() {
                       </FormLabel>
                     </FormItem>
                     <FormItem>
-                      <FormLabel className="[&:has([data-state=checked])>div]:border-primary flex-col">
+                      <FormLabel className="[&:has([data-state=checked])>div]:border-primary flex-col cursor-pointer">
                         <FormControl>
                           <RadioGroupItem value="dark" className="sr-only" />
                         </FormControl>
