@@ -5,11 +5,11 @@ import {
   DropdownMenu,
   DropdownMenuItem,
   DropdownMenuContent,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
-export function ExportButton({ className }: { className?: string }) {
+export function CardExportButton({ className }: { className?: string }) {
   return (
     <div className={cn(className)}>
       <DropdownMenu>

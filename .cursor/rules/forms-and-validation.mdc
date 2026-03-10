@@ -1,0 +1,45 @@
+---
+description: Form handling with react-hook-form and zod
+globs: "**/*.tsx"
+alwaysApply: false
+---
+
+# Forms & Validation
+
+## Stack
+
+- `react-hook-form` + `@hookform/resolvers/zod` + `zod`
+- shadcn/ui `<Form>` компоненты (`FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormMessage`)
+
+## Pattern
+
+```tsx
+const schema = z.object({
+  email: z.string().email(),
+})
+
+type FormValues = z.infer<typeof schema>
+
+function MyForm() {
+  const form = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: { email: "" },
+  })
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField control={form.control} name="email" render={({ field }) => (
+          <FormItem>
+            <FormLabel>Email</FormLabel>
+            <FormControl><Input {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+      </form>
+    </Form>
+  )
+}
+```
+
+- Zod-схемы определяй рядом с формой или в отдельном файле, если переиспользуются.

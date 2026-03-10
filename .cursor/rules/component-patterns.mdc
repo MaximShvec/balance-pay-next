@@ -1,0 +1,42 @@
+---
+description: React component conventions and shadcn/ui usage
+globs: src/components/**/*.tsx
+alwaysApply: false
+---
+
+# Component Patterns
+
+## Общие правила
+
+- Функциональные компоненты. Именованный экспорт (не default).
+- Props — через inline `interface` или `type` рядом с компонентом.
+- Композиция > наследование. Используй shadcn/ui примитивы как основу.
+
+## shadcn/ui
+
+- Компоненты `src/components/ui/` — **НЕ редактировать вручную**. Обновлять через `npx shadcn@latest add`.
+- Для кастомизации — оборачивай ui-компоненты в свои, не модифицируй исходники.
+
+## Структура модулей
+
+```
+src/components/feature-name/
+  index.ts              # Re-export
+  feature-component.tsx # Основной компонент
+  sub-component.tsx     # Вспомогательные
+```
+
+- Файлы именуй в kebab-case.
+- Каждый модуль компонентов имеет `index.ts` для удобного импорта.
+
+## Стилизация
+
+- Tailwind CSS v4 utility classes. Используй `cn()` из `@/lib/utils` для условных классов.
+- CSS-переменные из `globals.css` для цветов темы (`--background`, `--foreground`, `--primary` и т.д.).
+- Не используй inline styles или CSS-модули.
+
+## Иконки
+
+- SVG-иконки из `@/components/icons` (автогенерируемый индекс).
+- Lucide icons — через `lucide-react`.
+- Все кастомные SVG автоматически используют `currentColor`.

@@ -1,4 +1,4 @@
-import { DashboardContent } from "@/components/dashboard/dashboard-content";
+import { DashboardContent } from "@/components/dashboard";
 
 export const metadata = {
   title: "Ecommerce Admin Dashboard",

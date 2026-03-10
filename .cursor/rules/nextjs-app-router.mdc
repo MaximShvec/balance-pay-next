@@ -1,0 +1,33 @@
+---
+description: Next.js App Router conventions for pages and layouts
+globs: src/app/**/*.tsx
+alwaysApply: false
+---
+
+# Next.js App Router Conventions
+
+## Pages & Layouts
+
+- Компоненты страниц — Server Components по умолчанию. Используй `"use client"` только при необходимости (хуки, обработчики событий, browser API).
+- Каждая страница экспортирует `default` + опционально `generateMetadata`.
+- Используй `generateMeta()` из `@/lib/utils` для SEO-метаданных.
+- Тяжёлую UI-логику выноси в `src/components/`, а не в `page.tsx`.
+
+## Route Groups
+
+- `(app)` — основной layout с Sidebar + Header. Все пользовательские страницы внутри.
+
+## Data Fetching
+
+- Пока используются моки (JSON). При переходе на API — fetch в Server Components, не в клиентских.
+
+## File Organization
+
+```
+src/app/(app)/feature-name/
+  page.tsx          # Страница (Server Component)
+  layout.tsx        # Layout (если нужен)
+  components/       # Компоненты только этой страницы (если мало и специфичны)
+```
+
+Если компонентов > 2-3, выноси в `src/components/feature-name/`.

@@ -1,0 +1,50 @@
+---
+description: Core project context, tech stack, and ignore patterns for balance-pay-next
+alwaysApply: true
+---
+
+# Project Context
+
+**balance-pay-next** — финансовый дашборд / платёжная система на Next.js.
+
+## Tech Stack
+
+- Next.js 16 (App Router, React Compiler)
+- React 19 (RSC by default)
+- TypeScript (strict)
+- Tailwind CSS v4 (через PostCSS, конфиг в `globals.css` через `@theme inline`)
+- shadcn/ui (стиль new-york, baseColor stone)
+- Radix UI primitives
+- TanStack Table, Recharts, react-hook-form + zod, motion, date-fns
+- SVG-иконки через @svgr/webpack (цвет `currentColor`)
+- pnpm
+
+## Path Aliases
+
+`@/*` → `./src/*`
+
+## Ignore — НЕ читать и НЕ индексировать
+
+- `node_modules/`, `.next/`, `out/`, `build/`, `dist/`
+- `pnpm-lock.yaml`
+- `src/components/icons/index.ts` (автогенерируемый)
+- `src/assets/icons/` (102 SVG-файла, не редактировать вручную)
+- `.git/`, `.turbo/`, `.cache/`, `coverage/`
+
+## Key Directories
+
+| Путь | Назначение |
+|------|-----------|
+| `src/app/(app)/` | Основные страницы (App Router route group) |
+| `src/components/ui/` | shadcn/ui компоненты (не редактировать вручную) |
+| `src/components/layout/` | Header, Sidebar |
+| `src/components/dashboard/` | Виджеты дашборда |
+| `src/components/shared/` | Переиспользуемые компоненты |
+| `src/lib/` | Утилиты (`cn()`, `generateMeta()`, `page-titles`) |
+| `src/hooks/` | Кастомные хуки |
+
+## Notes
+
+- `src/app/(app)/funds-connect/` и `src/components/funds-connect/` — шаблон, пока не трогать.
+- API-маршрутов и middleware пока нет. Данные — моки (например `transactions/data.json`).
+- Отвечай на русском языке.

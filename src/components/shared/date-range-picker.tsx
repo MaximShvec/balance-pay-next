@@ -10,7 +10,7 @@ import {
   startOfDay,
   endOfDay,
   startOfYear,
-  startOfWeek
+  startOfWeek,
 } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import type { DateRange } from "react-day-picker";
@@ -18,15 +18,24 @@ import type { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -38,20 +47,19 @@ const dateFilterPresets = [
   { name: "Last 28 Days", value: "last28Days" },
   { name: "This Month", value: "thisMonth" },
   { name: "Last Month", value: "lastMonth" },
-  { name: "This Year", value: "thisYear" }
+  { name: "This Year", value: "thisYear" },
 ];
 
-export default function CalendarDateRangePicker({
-  className
+export function DateRangePicker({
+  className,
 }: React.HTMLAttributes<HTMLDivElement>) {
   const isMobile = useIsMobile();
   const today = new Date();
   const twentyEightDaysAgo = startOfDay(subDays(today, 27));
 
-  // Initialize with "Last 28 days" as default
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: twentyEightDaysAgo,
-    to: endOfDay(today)
+    to: endOfDay(today),
   });
   const [open, setOpen] = React.useState(false);
   const [currentMonth, setCurrentMonth] = React.useState<Date>(new Date());
@@ -62,39 +70,45 @@ export default function CalendarDateRangePicker({
   };
 
   const changeHandle = (type: string) => {
-    const today = new Date();
+    const now = new Date();
 
     switch (type) {
       case "today":
-        handleQuickSelect(startOfDay(today), endOfDay(today));
+        handleQuickSelect(startOfDay(now), endOfDay(now));
         break;
-      case "yesterday":
-        const yesterday = subDays(today, 1);
+      case "yesterday": {
+        const yesterday = subDays(now, 1);
         handleQuickSelect(startOfDay(yesterday), endOfDay(yesterday));
         break;
-      case "thisWeek":
-        const startOfCurrentWeek = startOfWeek(today);
-        handleQuickSelect(startOfDay(startOfCurrentWeek), endOfDay(today));
+      }
+      case "thisWeek": {
+        const startOfCurrentWeek = startOfWeek(now);
+        handleQuickSelect(startOfDay(startOfCurrentWeek), endOfDay(now));
         break;
-      case "last7Days":
-        const sevenDaysAgo = subDays(today, 6);
-        handleQuickSelect(startOfDay(sevenDaysAgo), endOfDay(today));
+      }
+      case "last7Days": {
+        const sevenDaysAgo = subDays(now, 6);
+        handleQuickSelect(startOfDay(sevenDaysAgo), endOfDay(now));
         break;
-      case "last28Days":
-        const twentyEightDaysAgo = subDays(today, 27); // 27 days ago + today = 28 days
-        handleQuickSelect(startOfDay(twentyEightDaysAgo), endOfDay(today));
+      }
+      case "last28Days": {
+        const daysAgo = subDays(now, 27);
+        handleQuickSelect(startOfDay(daysAgo), endOfDay(now));
         break;
+      }
       case "thisMonth":
-        handleQuickSelect(startOfMonth(today), endOfDay(today));
+        handleQuickSelect(startOfMonth(now), endOfDay(now));
         break;
-      case "lastMonth":
-        const lastMonth = subMonths(today, 1);
+      case "lastMonth": {
+        const lastMonth = subMonths(now, 1);
         handleQuickSelect(startOfMonth(lastMonth), endOfMonth(lastMonth));
         break;
-      case "thisYear":
-        const startOfCurrentYear = startOfYear(today);
-        handleQuickSelect(startOfDay(startOfCurrentYear), endOfDay(today));
+      }
+      case "thisYear": {
+        const startOfCurrentYear = startOfYear(now);
+        handleQuickSelect(startOfDay(startOfCurrentYear), endOfDay(now));
         break;
+      }
     }
   };
 
@@ -109,11 +123,12 @@ export default function CalendarDateRangePicker({
                   <TooltipTrigger asChild>
                     <Button
                       id="date"
-                      variant={"outline"}
+                      variant="outline"
                       className={cn(
                         "justify-start text-left font-normal",
-                        !date && "text-muted-foreground"
-                      )}>
+                        !date && "text-muted-foreground",
+                      )}
+                    >
                       <CalendarIcon />
                     </Button>
                   </TooltipTrigger>
@@ -121,7 +136,8 @@ export default function CalendarDateRangePicker({
                     {date?.from ? (
                       date.to ? (
                         <>
-                          {format(date.from, "dd MMM yyyy")} - {format(date.to, "dd MMM yyyy")}
+                          {format(date.from, "dd MMM yyyy")} -{" "}
+                          {format(date.to, "dd MMM yyyy")}
                         </>
                       ) : (
                         format(date.from, "dd MMM yyyy")
@@ -136,16 +152,18 @@ export default function CalendarDateRangePicker({
           ) : (
             <Button
               id="date"
-              variant={"outline"}
+              variant="outline"
               className={cn(
                 "justify-start text-left font-normal",
-                !date && "text-muted-foreground"
-              )}>
+                !date && "text-muted-foreground",
+              )}
+            >
               <CalendarIcon />
               {date?.from ? (
                 date.to ? (
                   <>
-                    {format(date.from, "dd MMM yyyy")} - {format(date.to, "dd MMM yyyy")}
+                    {format(date.from, "dd MMM yyyy")} -{" "}
+                    {format(date.to, "dd MMM yyyy")}
                   </>
                 ) : (
                   format(date.from, "dd MMM yyyy")
@@ -162,23 +180,31 @@ export default function CalendarDateRangePicker({
               <ToggleGroup
                 type="single"
                 defaultValue="last28Days"
-                className="hidden w-28 flex-col lg:block">
+                className="hidden w-28 flex-col lg:block"
+              >
                 {dateFilterPresets.map((item, key) => (
                   <ToggleGroupItem
                     key={key}
                     className="text-muted-foreground w-full"
                     value={item.value}
                     onClick={() => changeHandle(item.value)}
-                    asChild>
-                    <Button className="justify-start rounded-md">{item.name}</Button>
+                    asChild
+                  >
+                    <Button className="justify-start rounded-md">
+                      {item.name}
+                    </Button>
                   </ToggleGroupItem>
                 ))}
               </ToggleGroup>
-              <Select defaultValue="last28Days" onValueChange={(value) => changeHandle(value)}>
+              <Select
+                defaultValue="last28Days"
+                onValueChange={(value) => changeHandle(value)}
+              >
                 <SelectTrigger
                   className="mb-4 flex w-full lg:hidden"
                   size="sm"
-                  aria-label="Select a value">
+                  aria-label="Select a value"
+                >
                   <SelectValue placeholder="Last 28 Days" />
                 </SelectTrigger>
                 <SelectContent>

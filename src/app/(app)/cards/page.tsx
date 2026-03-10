@@ -2,15 +2,16 @@ import { generateMeta } from "@/lib/utils";
 import { Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-
-import CalendarDateRangePicker from "@/components/custom-date-range-picker";
-import CreditCards from "./components/my-wallet";
-import Revenue from "./components/revenue";
-import MonthlyExpenses from "./components/monthly-expenses";
-import Summary from "./components/summary";
-import Transactions from "./components/transactions";
-import SavingGoal from "./components/saving-goal";
-import KPICards from "./components/kpi-cards";
+import { DateRangePicker } from "@/components/shared";
+import {
+  KPICards,
+  Revenue,
+  MonthlyExpenses,
+  Summary,
+  CardTransactions,
+  SavingGoal,
+  MyWallet,
+} from "@/components/cards";
 
 export async function generateMetadata() {
   return generateMeta({
@@ -26,7 +27,7 @@ export default function Page() {
     <div className="space-y-4">
       <div className="flex flex-row items-center justify-end">
         <div className="flex items-center space-x-2">
-          <CalendarDateRangePicker />
+          <DateRangePicker />
           <Button size="icon">
             <Download />
           </Button>
@@ -42,10 +43,10 @@ export default function Page() {
       </div>
 
       <div className="grid-cols-2 gap-4 space-y-4 lg:grid lg:space-y-0">
-        <Transactions />
+        <CardTransactions />
         <div className="space-y-4">
           <SavingGoal />
-          <CreditCards />
+          <MyWallet />
         </div>
       </div>
     </div>

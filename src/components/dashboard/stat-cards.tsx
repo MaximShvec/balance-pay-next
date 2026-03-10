@@ -49,7 +49,7 @@ const data = [
   },
 ];
 
-export default function StatCards() {
+export function StatCards() {
   return (
     <div className="flex w-full justify-center h-full">
       <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">

@@ -10,7 +10,7 @@ import {
   ChartTooltip,
   ChartTooltipContent
 } from "@/components/ui/chart";
-import { ExportButton } from "@/components/CardActionMenus";
+import { CardExportButton as ExportButton } from "@/components/cards/card-action-menus";
 
 const chartData = [
   { source: "social", leads: 275, fill: "var(--color-social)" },
