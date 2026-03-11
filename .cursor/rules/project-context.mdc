@@ -33,18 +33,18 @@ alwaysApply: true
 
 ## Key Directories
 
-| Путь | Назначение |
-|------|-----------|
-| `src/app/(app)/` | Основные страницы (App Router route group) |
-| `src/components/ui/` | shadcn/ui компоненты (не редактировать вручную) |
-| `src/components/layout/` | Header, Sidebar |
-| `src/components/dashboard/` | Виджеты дашборда |
-| `src/components/shared/` | Переиспользуемые компоненты |
-| `src/lib/` | Утилиты (`cn()`, `generateMeta()`, `page-titles`) |
-| `src/hooks/` | Кастомные хуки |
+| Путь                        | Назначение                                        |
+| --------------------------- | ------------------------------------------------- |
+| `src/app/(app)/`            | Основные страницы (App Router route group)        |
+| `src/components/ui/`        | shadcn/ui компоненты (не редактировать вручную)   |
+| `src/components/layout/`    | Header, Sidebar                                   |
+| `src/components/dashboard/` | Виджеты дашборда                                  |
+| `src/components/shared/`    | Переиспользуемые компоненты                       |
+| `src/lib/`                  | Утилиты (`cn()`, `generateMeta()`, `page-titles`) |
+| `src/hooks/`                | Кастомные хуки                                    |
 
 ## Notes
 
-- `src/app/(app)/funds-connect/` и `src/components/funds-connect/` — шаблон, пока не трогать.
+- `src/app/(app)/funds/` и `src/components/funds/` — шаблон, пока не трогать.
 - API-маршрутов и middleware пока нет. Данные — моки (например `transactions/data.json`).
 - Отвечай на русском языке.

@@ -29,9 +29,9 @@ import {
 
 // Values from stat-cards.tsx (Crypto, Stable, Fiat) + total from welcome.tsx
 const balanceData = [
-  { name: "crypto", value: 25582.34, fill: "var(--chart-1)" },
-  { name: "stable", value: 3413.25, fill: "var(--chart-2)" },
-  { name: "fiat", value: 1234.56, fill: "var(--chart-3)" },
+  { name: "crypto", value: 25582.34, fill: "#FFD780" },
+  { name: "stable", value: 3413.25, fill: "#D5B8F8" },
+  { name: "fiat", value: 1234.56, fill: "#9CD1FB" },
 ];
 
 const totalBalance = 39231.9; // from welcome.tsx
@@ -42,19 +42,19 @@ const chartConfig = {
   },
   crypto: {
     label: "Crypto",
-    color: "var(--chart-1)",
+    color: "#FFD780",
   },
   stable: {
     label: "Stable",
-    color: "var(--chart-2)",
+    color: "#D5B8F8",
   },
   fiat: {
     label: "Fiat Wealth",
-    color: "var(--chart-3)",
+    color: "#9CD1FB",
   },
   total: {
     label: "Total",
-    color: "var(--chart-4)",
+    color: "#B3E5C9",
   },
 } satisfies ChartConfig;
 

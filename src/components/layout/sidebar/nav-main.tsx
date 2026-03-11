@@ -28,17 +28,9 @@ export const navItems = [
     icon: WalletLinearIcon,
     iconActive: WalletBoldIcon,
   },
-  // { title: "Cards", href: "/cards", icon: AssetIcon },
   {
-    title: "Transactions",
-    href: "/transactions",
-    icon: TransactionsLinearIcon,
-    iconActive: TransactionsBoldIcon,
-  },
-  // { title: "Buy & Sell", href: "/", icon: BuysellIcon },
-  {
-    title: "Funds Connect",
-    href: "/funds-connect",
+    title: "Funds",
+    href: "/funds",
     icon: FundsconnectLinearIcon,
     iconActive: FundsconnectBoldIcon,
   },
@@ -48,7 +40,12 @@ export const navItems = [
     icon: AssetsIcon,
     iconActive: AssetsIcon,
   },
-  // { title: "Verification", href: "/", icon: AmlLinearIcon },
+  {
+    title: "Transactions",
+    href: "/transactions",
+    icon: TransactionsLinearIcon,
+    iconActive: TransactionsBoldIcon,
+  },
 ];
 
 export const searchNavItems = [{ title: "Menu", items: navItems }];

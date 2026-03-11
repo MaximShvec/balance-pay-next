@@ -3,8 +3,8 @@ import {
   LeadBySourceCard,
   SalesPipeline,
   RecentTasks,
-  FundsStatCards
-} from "@/components/funds-connect";
+  FundsStatCards,
+} from "@/components/funds";
 import { AssetsTable } from "@/components/dashboard";
 
 export async function generateMetadata() {
@@ -12,7 +12,7 @@ export async function generateMetadata() {
     title: "CRM Admin Dashboard",
     description:
       "CRM admin dashboard template offers a streamlined and interactive interface for managing customer relationships, tracking sales, and analyzing performance metrics. Built with shadcn/ui, Tailwind CSS, Next.js.",
-    canonical: "/funds-connect"
+    canonical: "/funds",
   });
 }
 

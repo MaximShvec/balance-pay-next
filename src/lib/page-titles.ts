@@ -5,7 +5,7 @@
 export const PAGE_TITLES: Record<string, string> = {
   "/": "Dashboard",
   "/transactions": "Transactions",
-  "/funds-connect": "Funds Connect",
+  "/funds": "Funds",
   "/assets": "Assets",
   "/cards": "Cards",
   "/new-workspace": "New Workspace",

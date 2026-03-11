@@ -13,28 +13,28 @@ import {
 import { CardExportButton as ExportButton } from "@/components/cards/card-action-menus";
 
 const chartData = [
-  { source: "social", leads: 275, fill: "var(--color-social)" },
-  { source: "email", leads: 200, fill: "var(--color-email)" },
-  { source: "call", leads: 287, fill: "var(--color-call)" },
-  { source: "others", leads: 173, fill: "var(--color-others)" }
+  { source: "social", leads: 275, fill: "#9CD1FB" },
+  { source: "email", leads: 200, fill: "#B3E5C9" },
+  { source: "call", leads: 287, fill: "#FFD780" },
+  { source: "others", leads: 173, fill: "#D5B8F8" }
 ];
 
 const chartConfig = {
   social: {
     label: "Social",
-    color: "var(--chart-1)"
+    color: "#9CD1FB"
   },
   email: {
     label: "Email",
-    color: "var(--chart-2)"
+    color: "#B3E5C9"
   },
   call: {
     label: "Call",
-    color: "var(--chart-3)"
+    color: "#FFD780"
   },
   others: {
     label: "Others",
-    color: "var(--chart-4)"
+    color: "#D5B8F8"
   }
 } satisfies ChartConfig;
 
