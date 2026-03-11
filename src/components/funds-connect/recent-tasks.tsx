@@ -1,113 +1,112 @@
 "use client";
 
-import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { PlusCircleIcon } from "lucide-react";
+import {
+  PlusCircleIcon,
+  CreditCard,
+  Lock,
+  Trash2,
+  Aperture,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { DotsIcon } from "@/components/icons";
 
-type Task = {
+type LinkedMethod = {
   id: string;
-  title: string;
-  description: string;
-  completed: boolean;
-  dueDate: string;
-  priority: "high" | "medium" | "low";
+  name: string;
+  bank: string;
+  last4: string;
 };
 
-const initialTasks: Task[] = [
+const linkedMethods: LinkedMethod[] = [
   {
     id: "1",
-    title: "Follow up with Acme Inc.",
-    description: "Send proposal and schedule meeting",
-    completed: false,
-    dueDate: "Today",
-    priority: "high"
+    name: "EUR bank account",
+    bank: "Banking Circle",
+    last4: "19",
   },
   {
     id: "2",
-    title: "Prepare quarterly report",
-    description: "Compile sales data and forecasts",
-    completed: false,
-    dueDate: "Tomorrow",
-    priority: "medium"
+    name: "USD bank account",
+    bank: "Banking Circle",
+    last4: "19",
   },
-  {
-    id: "3",
-    title: "Update customer profiles",
-    description: "Verify contact information and preferences",
-    completed: true,
-    dueDate: "Oct 15",
-    priority: "low"
-  }
 ];
 
 export function RecentTasks() {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
-
-  const toggleTaskStatus = (id: string) => {
-    setTasks(
-      tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task))
-    );
-  };
-
   return (
     <Card className="h-full">
-      <CardHeader>
-        <CardTitle>Tasks</CardTitle>
-        <CardDescription>Track and manage your upcoming tasks.</CardDescription>
+      <CardHeader className="items-center">
+        <CardTitle>Linked methods</CardTitle>
         <CardAction>
-          <Button variant="outline" size="sm">
-            <PlusCircleIcon /> Add Task
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 rounded-full"
+          >
+            <PlusCircleIcon className="h-4 w-4" />
+            <span className="sr-only">Add Method</span>
           </Button>
         </CardAction>
       </CardHeader>
       <CardContent className="space-y-3">
-        {tasks.map((task) => (
+        {linkedMethods.map((method) => (
           <div
-            key={task.id}
-            className={cn(
-              "flex items-start space-x-3 rounded-md border p-3 transition-colors",
-              task.completed && "bg-muted/50"
-            )}>
-            <Checkbox
-              checked={task.completed}
-              onCheckedChange={() => toggleTaskStatus(task.id)}
-              className="mt-1"
-            />
-            <div className="space-y-1">
-              <p
-                className={cn(
-                  "text-sm leading-none font-medium",
-                  task.completed && "text-muted-foreground line-through"
-                )}>
-                {task.title}
-              </p>
-              <p className={cn("text-muted-foreground text-xs", task.completed && "line-through")}>
-                {task.description}
-              </p>
-              <div className="flex items-center pt-1">
-                <div
-                  className={cn(
-                    "mr-2 rounded-full px-2 py-0.5 text-xs font-medium",
-                    task.priority === "high" && "bg-red-100 text-red-700",
-                    task.priority === "medium" && "bg-amber-100 text-amber-700",
-                    task.priority === "low" && "bg-green-100 text-green-700"
-                  )}>
-                  {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
-                </div>
-                <span className="text-muted-foreground text-xs">Due {task.dueDate}</span>
+            key={method.id}
+            className="flex items-center justify-between rounded-md bg-transparent p-3 transition-colors border border-border"
+          >
+            <div className="flex items-center space-x-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm">
+                <Aperture className="h-6 w-6 text-black" />
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm font-medium leading-none">
+                  {method.name}
+                </p>
+                <p className="text-muted-foreground text-xs">
+                  {method.bank} •••• {method.last4}
+                </p>
               </div>
             </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-primary hover:text-primary/90 h-8 w-8 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  aria-label="Открыть меню"
+                >
+                  <DotsIcon />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[280px]">
+                <DropdownMenuItem>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Withdraw to this account
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Lock className="mr-2 h-4 w-4" />
+                  Show details
+                </DropdownMenuItem>
+                <DropdownMenuItem className="text-destructive focus:text-destructive">
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Remove method
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         ))}
       </CardContent>

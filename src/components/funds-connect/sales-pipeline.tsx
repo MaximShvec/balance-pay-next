@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-type PipelineStage = {
+type OperationType = {
   id: string;
   name: string;
   count: number;
@@ -10,41 +10,27 @@ type PipelineStage = {
   color: string;
 };
 
-const pipelineData: PipelineStage[] = [
+const pipelineData: OperationType[] = [
   {
-    id: "lead",
-    name: "Lead",
-    count: 235,
-    value: 420500,
+    id: "deposit",
+    name: "Deposit",
+    count: 342,
+    value: 185000,
     color: "bg-[var(--chart-1)]"
   },
   {
-    id: "qualified",
-    name: "Qualified",
-    count: 146,
-    value: 267800,
+    id: "withdraw",
+    name: "Withdraw",
+    count: 218,
+    value: 124500,
     color: "bg-[var(--chart-2)]"
   },
   {
-    id: "proposal",
-    name: "Proposal",
-    count: 84,
-    value: 192400,
+    id: "exchange",
+    name: "Exchange",
+    count: 156,
+    value: 89200,
     color: "bg-[var(--chart-3)]"
-  },
-  {
-    id: "negotiation",
-    name: "Negotiation",
-    count: 52,
-    value: 129600,
-    color: "bg-[var(--chart-4)]"
-  },
-  {
-    id: "closed",
-    name: "Closed Won",
-    count: 36,
-    value: 87200,
-    color: "bg-[var(--chart-5)]"
   }
 ];
 
@@ -56,7 +42,7 @@ export function SalesPipeline() {
     <Card>
       <CardHeader>
         <CardTitle>Sales Pipeline</CardTitle>
-        <CardDescription>Current deals in your sales pipeline.</CardDescription>
+        <CardDescription>Операции по типам: deposit, withdraw, exchange.</CardDescription>
       </CardHeader>
       <CardContent>
         <TooltipProvider>
@@ -71,7 +57,7 @@ export function SalesPipeline() {
                 <TooltipContent>
                   <div className="text-sm">
                     <p className="font-medium">{stage.name}</p>
-                    <p className="text-muted-foreground text-xs">{stage.count} deals</p>
+                    <p className="text-muted-foreground text-xs">{stage.count} операций</p>
                     <p className="text-muted-foreground text-xs">${stage.value.toLocaleString()}</p>
                   </div>
                 </TooltipContent>
@@ -88,7 +74,7 @@ export function SalesPipeline() {
                 <div>
                   <p className="text-sm font-medium">{stage.name}</p>
                   <p className="text-muted-foreground text-xs">
-                    {stage.count} deals · ${stage.value.toLocaleString()}
+                    {stage.count} операций · ${stage.value.toLocaleString()}
                   </p>
                 </div>
                 <div className="flex w-24 items-center gap-2">
