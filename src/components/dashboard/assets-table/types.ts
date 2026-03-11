@@ -1,5 +1,11 @@
 export type CurrencyTypeFilter = "all" | "crypto" | "stable" | "fiat";
 
+export type AssetsTableFilterBy = "fiat" | "crypto" | "crypto-and-stable";
+
+export function showTypeFilter(filterBy: AssetsTableFilterBy | undefined): boolean {
+  return !filterBy || filterBy === "crypto-and-stable";
+}
+
 export type AssetsFilterState = {
   hideZeroBalance: boolean;
   setHideZeroBalance: (v: boolean) => void;
@@ -11,5 +17,5 @@ export type AssetsFilterState = {
   setSelectedNetworks: React.Dispatch<React.SetStateAction<Set<string>>>;
   uniqueCurrencies: { key: string; label: string }[];
   uniqueNetworks: string[];
-  filterBy?: "fiat" | "crypto";
+  filterBy?: AssetsTableFilterBy;
 };

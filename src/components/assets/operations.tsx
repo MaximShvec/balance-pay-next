@@ -1,6 +1,17 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type OperationType = {
   id: string;
@@ -12,37 +23,53 @@ type OperationType = {
 
 const pipelineData: OperationType[] = [
   {
-    id: "deposit",
-    name: "Deposit",
-    count: 342,
-    value: 185000,
-    color: "bg-[var(--chart-1)]"
+    id: "receive",
+    name: "Receive",
+    count: 156,
+    value: 89200,
+    color: "bg-[var(--chart-1)]",
   },
   {
-    id: "withdraw",
-    name: "Withdraw",
-    count: 218,
-    value: 124500,
-    color: "bg-[var(--chart-2)]"
+    id: "send",
+    name: "Send",
+    count: 124,
+    value: 67500,
+    color: "bg-[var(--chart-2)]",
   },
   {
     id: "exchange",
     name: "Exchange",
-    count: 156,
-    value: 89200,
-    color: "bg-[var(--chart-3)]"
-  }
+    count: 98,
+    value: 54300,
+    color: "bg-[var(--chart-3)]",
+  },
+  {
+    id: "convert",
+    name: "Convert",
+    count: 67,
+    value: 38100,
+    color: "bg-[var(--chart-4)]",
+  },
+  {
+    id: "move",
+    name: "Move",
+    count: 52,
+    value: 28900,
+    color: "bg-[var(--chart-5)]",
+  },
 ];
 
 const totalValue = pipelineData.reduce((sum, stage) => sum + stage.value, 0);
 const totalCount = pipelineData.reduce((sum, stage) => sum + stage.count, 0);
 
-export function SalesPipeline() {
+export function Operations() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sales Pipeline</CardTitle>
-        <CardDescription>Операции по типам: deposit, withdraw, exchange.</CardDescription>
+        <CardTitle>Operations</CardTitle>
+        <CardDescription>
+          Операции по типам: receive, send, exchange, convert, move.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <TooltipProvider>
@@ -52,13 +79,18 @@ export function SalesPipeline() {
                 <TooltipTrigger asChild>
                   <div
                     className={`${stage.color} h-full`}
-                    style={{ width: `${(stage.value / totalValue) * 100}%` }}></div>
+                    style={{ width: `${(stage.value / totalValue) * 100}%` }}
+                  ></div>
                 </TooltipTrigger>
                 <TooltipContent>
                   <div className="text-sm">
                     <p className="font-medium">{stage.name}</p>
-                    <p className="text-muted-foreground text-xs">{stage.count} операций</p>
-                    <p className="text-muted-foreground text-xs">${stage.value.toLocaleString()}</p>
+                    <p className="text-muted-foreground text-xs">
+                      {stage.count} операций
+                    </p>
+                    <p className="text-muted-foreground text-xs">
+                      ${stage.value.toLocaleString()}
+                    </p>
                   </div>
                 </TooltipContent>
               </Tooltip>

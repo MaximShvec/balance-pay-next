@@ -2,7 +2,8 @@ import type { Table } from "@tanstack/react-table";
 import { PlusCircle } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import type { Asset } from "@/types";
-import type { AssetsFilterState } from "./types";
+import type { AssetsFilterState, AssetsTableFilterBy } from "./types";
+import { showTypeFilter } from "./types";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,7 +35,7 @@ type ToolbarProps = {
   table: Table<Asset>;
   showFilters: boolean;
   filters: AssetsFilterState;
-  filterBy?: "fiat" | "crypto";
+  filterBy?: AssetsTableFilterBy;
 };
 
 export function AssetsToolbar({ table, showFilters, filters, filterBy }: ToolbarProps) {
@@ -93,7 +94,7 @@ export function AssetsToolbar({ table, showFilters, filters, filterBy }: Toolbar
                   </label>
                 </div>
               </div>
-              {!filterBy && (
+              {showTypeFilter(filterBy) && (
                 <div className="order-3 w-full basis-full sm:order-0 sm:w-auto sm:basis-auto shrink-0">
                   <Select
                     value={currencyTypeFilter}
@@ -110,7 +111,9 @@ export function AssetsToolbar({ table, showFilters, filters, filterBy }: Toolbar
                       <SelectItem value="all">All</SelectItem>
                       <SelectItem value="crypto">Crypto</SelectItem>
                       <SelectItem value="stable">Stable</SelectItem>
-                      <SelectItem value="fiat">Fiat</SelectItem>
+                      {filterBy !== "crypto-and-stable" && (
+                        <SelectItem value="fiat">Fiat</SelectItem>
+                      )}
                     </SelectContent>
                   </Select>
                 </div>

@@ -1,9 +1,9 @@
 import { generateMeta } from "@/lib/utils";
 import {
-  LeadBySourceCard,
-  SalesPipeline,
-  RecentTasks,
+  Operations,
+  LinkedMethods,
   FundsStatCards,
+  IbansBalanceCard,
 } from "@/components/funds";
 import { AssetsTable } from "@/components/dashboard";
 
@@ -23,9 +23,9 @@ export default async function Page() {
         <FundsStatCards />
       </div>
       <div className="grid gap-4 xl:grid-cols-3">
-        <LeadBySourceCard />
-        <RecentTasks />
-        <SalesPipeline />
+        <IbansBalanceCard />
+        <Operations />
+        <LinkedMethods />
       </div>
       <AssetsTable filterBy="fiat" />
     </div>

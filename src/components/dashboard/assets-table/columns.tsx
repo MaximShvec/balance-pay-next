@@ -10,6 +10,7 @@ import {
   RecieveIcon,
   SendIcon,
 } from "@/components/icons";
+import { getCurrencyType } from "./data";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -165,37 +166,66 @@ export const columns: ColumnDef<Asset>[] = [
     header: "Actions",
     enableSorting: false,
     enableHiding: false,
-    cell: () => (
-      <div className="text-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0 cursor-pointer transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
-            >
-              <span className="sr-only">Open menu</span>
-              <DotsIcon className="size-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <AssetIcon /> Asset Page
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <SendIcon /> Send
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <RecieveIcon /> Receive
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <MoveIcon /> Move
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <BuyIcon /> Buy & Sell
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const currencyType = getCurrencyType(row.original.asset.ticker);
+      const isFiat = currencyType === "fiat";
+
+      return (
+        <div className="text-end">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 cursor-pointer transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
+              >
+                <span className="sr-only">Open menu</span>
+                <DotsIcon className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {isFiat ? (
+                <>
+                  <DropdownMenuItem>
+                    <RecieveIcon className="mr-2 size-4" />
+                    Deposit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <SendIcon className="mr-2 size-4" />
+                    Withdraw
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <BuyIcon className="mr-2 size-4" />
+                    Buy & Sell
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <>
+                  <DropdownMenuItem>
+                    <AssetIcon className="mr-2 size-4" />
+                    Asset Page
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <SendIcon className="mr-2 size-4" />
+                    Send
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <RecieveIcon className="mr-2 size-4" />
+                    Receive
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <MoveIcon className="mr-2 size-4" />
+                    Move
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <BuyIcon className="mr-2 size-4" />
+                    Buy & Sell
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
+    },
   },
 ];

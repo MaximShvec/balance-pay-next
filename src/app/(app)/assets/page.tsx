@@ -1,10 +1,10 @@
 import { generateMeta } from "@/lib/utils";
 import {
-  LeadBySourceCard,
-  SalesPipeline,
-  RecentTasks,
-} from "@/components/funds";
-import { AssetsStatCards } from "@/components/assets";
+  AssetsStatCards,
+  WalletBalanceCard,
+  LinkedMethods,
+  Operations,
+} from "@/components/assets";
 import { AssetsTable } from "@/components/dashboard";
 
 export async function generateMetadata() {
@@ -23,11 +23,11 @@ export default async function Page() {
         <AssetsStatCards />
       </div>
       <div className="grid gap-4 xl:grid-cols-3">
-        <LeadBySourceCard />
-        <RecentTasks />
-        <SalesPipeline />
+        <WalletBalanceCard />
+        <Operations />
+        <LinkedMethods />
       </div>
-      <AssetsTable filterBy="crypto" />
+      <AssetsTable filterBy="crypto-and-stable" />
     </div>
   );
 }

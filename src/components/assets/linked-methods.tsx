@@ -1,13 +1,14 @@
 "use client";
 
-import {
-  PlusCircleIcon,
-  CreditCard,
-  Lock,
-  Trash2,
-  Aperture,
-} from "lucide-react";
+import { Aperture, PlusCircleIcon } from "lucide-react";
 
+import {
+  DeleteIcon,
+  DotsIcon,
+  EditIcon,
+  EyeOpenedIcon,
+  SendIcon,
+} from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,7 +23,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DotsIcon } from "@/components/icons";
 
 type LinkedMethod = {
   id: string;
@@ -46,7 +46,7 @@ const linkedMethods: LinkedMethod[] = [
   },
 ];
 
-export function RecentTasks() {
+export function LinkedMethods() {
   return (
     <Card className="h-full">
       <CardHeader className="items-center">
@@ -94,16 +94,20 @@ export function RecentTasks() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-[280px]">
                 <DropdownMenuItem>
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  Withdraw to this account
+                  <SendIcon className="mr-2 size-4" />
+                  Send
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Lock className="mr-2 h-4 w-4" />
-                  Show details
+                  <EditIcon className="mr-2 size-4" />
+                  Edit wallet
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <EyeOpenedIcon className="mr-2 size-4" />
+                  Show wallet
                 </DropdownMenuItem>
                 <DropdownMenuItem className="text-destructive focus:text-destructive">
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Remove method
+                  <DeleteIcon className="mr-2 size-4 text-destructive" />
+                  Remove wallet
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -1,4 +1,4 @@
-export * from "./sales-pipeline";
-export * from "./leads-by-source";
-export * from "./recent-tasks";
+export * from "./operations";
+export * from "./ibans-balance-card";
+export * from "./linked-methods";
 export * from "./stat-cards";

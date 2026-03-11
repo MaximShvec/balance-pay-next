@@ -37,17 +37,20 @@ import {
 
 import { columns } from "./columns";
 import { assetsData, getCurrencyType, exportAssetsToCsv } from "./data";
-import type { CurrencyTypeFilter } from "./types";
+import type { AssetsTableFilterBy, CurrencyTypeFilter } from "./types";
+import { showTypeFilter } from "./types";
 import { AssetsToolbar } from "./toolbar";
 import { AssetsMobileFilters } from "./mobile-filters";
 import { AssetsPagination } from "./pagination";
 
 type AssetsTableProps = {
   /** When set, only rows of this type are shown (fiat or crypto). Hides the type filter. */
-  filterBy?: "fiat" | "crypto";
+  filterBy?: AssetsTableFilterBy;
+  /** Override the table title. When not set, derived from filterBy. */
+  title?: string;
 };
 
-export function AssetsTable({ filterBy }: AssetsTableProps = {}) {
+export function AssetsTable({ filterBy, title: titleProp }: AssetsTableProps = {}) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -59,7 +62,9 @@ export function AssetsTable({ filterBy }: AssetsTableProps = {}) {
     React.useState<PaginationState>({ pageIndex: 0, pageSize: 12 });
 
   const [currencyTypeFilter, setCurrencyTypeFilter] =
-    React.useState<CurrencyTypeFilter>(filterBy ?? "all");
+    React.useState<CurrencyTypeFilter>(
+      showTypeFilter(filterBy) ? "all" : (filterBy as CurrencyTypeFilter)
+    );
   const [hideZeroBalance, setHideZeroBalance] = React.useState(false);
   const [selectedCurrencies, setSelectedCurrencies] = React.useState<
     Set<string>
@@ -78,7 +83,13 @@ export function AssetsTable({ filterBy }: AssetsTableProps = {}) {
   const sourceData = React.useMemo(() => {
     if (!filterBy) return assetsData;
     return assetsData.filter(
-      (o) => getCurrencyType(o.asset.ticker) === filterBy,
+      (o) => {
+        const type = getCurrencyType(o.asset.ticker);
+        if (filterBy === "crypto-and-stable") {
+          return type === "crypto" || type === "stable";
+        }
+        return type === filterBy;
+      }
     );
   }, [filterBy]);
 
@@ -114,7 +125,7 @@ export function AssetsTable({ filterBy }: AssetsTableProps = {}) {
   const filteredData = React.useMemo(() => {
     return sourceData.filter((order) => {
       const type = getCurrencyType(order.asset.ticker);
-      const effectiveTypeFilter = filterBy ?? currencyTypeFilter;
+      const effectiveTypeFilter = showTypeFilter(filterBy) ? currencyTypeFilter : (filterBy as CurrencyTypeFilter);
       if (effectiveTypeFilter !== "all" && type !== effectiveTypeFilter)
         return false;
       if (hideZeroBalance && order.balance === 0) return false;
@@ -154,7 +165,7 @@ export function AssetsTable({ filterBy }: AssetsTableProps = {}) {
   const filterState = {
     hideZeroBalance,
     setHideZeroBalance,
-    currencyTypeFilter: filterBy ?? currencyTypeFilter,
+    currencyTypeFilter: showTypeFilter(filterBy) ? currencyTypeFilter : (filterBy as CurrencyTypeFilter),
     setCurrencyTypeFilter,
     selectedCurrencies,
     setSelectedCurrencies,
@@ -165,10 +176,18 @@ export function AssetsTable({ filterBy }: AssetsTableProps = {}) {
     filterBy,
   };
 
+  const tableTitle =
+    titleProp ??
+    (filterBy === "fiat"
+      ? "Fiat"
+      : filterBy === "crypto-and-stable"
+        ? "Crypto & Stable"
+        : "Assets");
+
   return (
     <Card className="lg:col-span-12 border-none py-0 gap-4">
       <CardHeader className="flex flex-row items-center justify-between gap-2 px-0">
-        <CardTitle>Assets</CardTitle>
+        <CardTitle>{tableTitle}</CardTitle>
         <CardAction className="relative flex items-center gap-2">
           <Button
             variant="outline"

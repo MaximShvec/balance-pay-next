@@ -1,4 +1,5 @@
-import type { AssetsFilterState, CurrencyTypeFilter } from "./types";
+import type { AssetsFilterState, AssetsTableFilterBy, CurrencyTypeFilter } from "./types";
+import { showTypeFilter } from "./types";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,7 +23,7 @@ type MobileFiltersProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   filters: AssetsFilterState;
-  filterBy?: "fiat" | "crypto";
+  filterBy?: AssetsTableFilterBy;
 };
 
 export function AssetsMobileFilters({
@@ -48,8 +49,8 @@ export function AssetsMobileFilters({
     { value: "all", label: "All" },
     { value: "crypto", label: "Crypto" },
     { value: "stable", label: "Stable" },
-    { value: "fiat", label: "Fiat" },
   ];
+  if (filterBy !== "crypto-and-stable") typeOptions.push({ value: "fiat", label: "Fiat" });
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -64,9 +65,9 @@ export function AssetsMobileFilters({
         <Accordion
           type="multiple"
           defaultValue={
-            filterBy
-              ? ["hide-zero", "currencies", "networks"]
-              : ["hide-zero", "type", "currencies", "networks"]
+            showTypeFilter(filterBy)
+              ? ["hide-zero", "type", "currencies", "networks"]
+              : ["hide-zero", "currencies", "networks"]
           }
           className="w-full"
         >
@@ -90,7 +91,7 @@ export function AssetsMobileFilters({
               </div>
             </AccordionContent>
           </AccordionItem>
-          {!filterBy && (
+          {showTypeFilter(filterBy) && (
             <AccordionItem value="type">
               <AccordionTrigger className="py-4">
                 Type

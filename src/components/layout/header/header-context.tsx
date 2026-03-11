@@ -3,6 +3,7 @@
 import * as React from "react";
 import { usePathname } from "next/navigation";
 import { getPageTitle } from "@/lib/page-titles";
+import { Badge } from "@/components/ui/badge";
 
 /**
  * Контекст для кастомизации заголовка в шапке.
@@ -88,6 +89,7 @@ export function HeaderTitleSlot() {
       <h1 className="text-foreground text-lg font-semibold lg:text-2xl shrink-0">
         {title}
       </h1>
+      <Badge variant="success">Verified</Badge>
       {extra}
     </div>
   );

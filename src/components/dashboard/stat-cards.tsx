@@ -22,6 +22,7 @@ const data = [
     menuItems: [
       { label: "Send", icon: SendIcon },
       { label: "Receive", icon: RecieveIcon },
+      { label: "Move", icon: MoveIcon },
     ],
   },
   {
@@ -31,9 +32,9 @@ const data = [
     changeType: "positive",
     href: "#",
     menuItems: [
-      { label: "Deposit", icon: SendIcon },
-      { label: "Withdraw", icon: RecieveIcon },
-      { label: "Move to Cards", icon: MoveIcon },
+      { label: "Send", icon: SendIcon },
+      { label: "Receive", icon: RecieveIcon },
+      { label: "Move", icon: MoveIcon },
     ],
   },
   {
@@ -43,8 +44,8 @@ const data = [
     changeType: "negative",
     href: "#",
     menuItems: [
-      { label: "Deposit", icon: SendIcon },
-      { label: "Withdraw", icon: RecieveIcon },
+      { label: "Withdraw", icon: SendIcon },
+      { label: "Deposit", icon: RecieveIcon },
     ],
   },
 ];
