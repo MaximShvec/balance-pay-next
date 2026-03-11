@@ -10,6 +10,7 @@ import AmlLinearIcon from "@/assets/icons/AML-linear.svg";
 import ApiIcon from "@/assets/icons/api.svg";
 import ApplePayIcon from "@/assets/icons/apple-pay.svg";
 import AssetIcon from "@/assets/icons/asset.svg";
+import AssetsIcon from "@/assets/icons/assets.svg";
 import AttachIcon from "@/assets/icons/attach.svg";
 import BackIcon from "@/assets/icons/back.svg";
 import BalancepayIcon from "@/assets/icons/balancepay.svg";
@@ -119,6 +120,7 @@ export {
   ApiIcon,
   ApplePayIcon,
   AssetIcon,
+  AssetsIcon,
   AttachIcon,
   BackIcon,
   BalancepayIcon,

@@ -10,7 +10,7 @@ import {
 import {
   WalletLinearIcon,
   WalletBoldIcon,
-  AssetIcon,
+  AssetsIcon,
   TransactionsLinearIcon,
   TransactionsBoldIcon,
   BuysellIcon,
@@ -41,6 +41,12 @@ export const navItems = [
     href: "/funds-connect",
     icon: FundsconnectLinearIcon,
     iconActive: FundsconnectBoldIcon,
+  },
+  {
+    title: "Assets",
+    href: "/assets",
+    icon: AssetsIcon,
+    iconActive: AssetsIcon,
   },
   // { title: "Verification", href: "/", icon: AmlLinearIcon },
 ];

@@ -42,7 +42,12 @@ import { AssetsToolbar } from "./toolbar";
 import { AssetsMobileFilters } from "./mobile-filters";
 import { AssetsPagination } from "./pagination";
 
-export function AssetsTable() {
+type AssetsTableProps = {
+  /** When set, only rows of this type are shown (fiat or crypto). Hides the type filter. */
+  filterBy?: "fiat" | "crypto";
+};
+
+export function AssetsTable({ filterBy }: AssetsTableProps = {}) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -54,7 +59,7 @@ export function AssetsTable() {
     React.useState<PaginationState>({ pageIndex: 0, pageSize: 12 });
 
   const [currencyTypeFilter, setCurrencyTypeFilter] =
-    React.useState<CurrencyTypeFilter>("all");
+    React.useState<CurrencyTypeFilter>(filterBy ?? "all");
   const [hideZeroBalance, setHideZeroBalance] = React.useState(false);
   const [selectedCurrencies, setSelectedCurrencies] = React.useState<
     Set<string>
@@ -70,9 +75,16 @@ export function AssetsTable() {
     if (!isMobile) setOpenFiltersSheet(false);
   }, [isMobile]);
 
+  const sourceData = React.useMemo(() => {
+    if (!filterBy) return assetsData;
+    return assetsData.filter(
+      (o) => getCurrencyType(o.asset.ticker) === filterBy,
+    );
+  }, [filterBy]);
+
   const uniqueCurrencies = React.useMemo(() => {
     const seen = new Set<string>();
-    return assetsData
+    return sourceData
       .map((o) => {
         const key = `${o.asset.ticker}-${o.asset.network ?? "native"}`;
         if (seen.has(key)) return null;
@@ -85,11 +97,11 @@ export function AssetsTable() {
         };
       })
       .filter((c): c is { key: string; label: string } => c !== null);
-  }, []);
+  }, [sourceData]);
 
   const uniqueNetworks = React.useMemo(() => {
     const seen = new Set<string>();
-    return assetsData
+    return sourceData
       .map((o) => o.asset.network ?? "Native")
       .filter((n) => {
         if (seen.has(n)) return false;
@@ -97,12 +109,13 @@ export function AssetsTable() {
         return true;
       })
       .sort((a, b) => (a === "Native" ? -1 : a.localeCompare(b)));
-  }, []);
+  }, [sourceData]);
 
   const filteredData = React.useMemo(() => {
-    return assetsData.filter((order) => {
+    return sourceData.filter((order) => {
       const type = getCurrencyType(order.asset.ticker);
-      if (currencyTypeFilter !== "all" && type !== currencyTypeFilter)
+      const effectiveTypeFilter = filterBy ?? currencyTypeFilter;
+      if (effectiveTypeFilter !== "all" && type !== effectiveTypeFilter)
         return false;
       if (hideZeroBalance && order.balance === 0) return false;
       if (selectedCurrencies.size > 0) {
@@ -115,7 +128,7 @@ export function AssetsTable() {
       }
       return true;
     });
-  }, [currencyTypeFilter, hideZeroBalance, selectedCurrencies, selectedNetworks]);
+  }, [filterBy, currencyTypeFilter, hideZeroBalance, selectedCurrencies, selectedNetworks, sourceData]);
 
   const pagination = React.useMemo(
     () => ({ pageIndex, pageSize }),
@@ -141,7 +154,7 @@ export function AssetsTable() {
   const filterState = {
     hideZeroBalance,
     setHideZeroBalance,
-    currencyTypeFilter,
+    currencyTypeFilter: filterBy ?? currencyTypeFilter,
     setCurrencyTypeFilter,
     selectedCurrencies,
     setSelectedCurrencies,
@@ -149,6 +162,7 @@ export function AssetsTable() {
     setSelectedNetworks,
     uniqueCurrencies,
     uniqueNetworks,
+    filterBy,
   };
 
   return (
@@ -207,6 +221,7 @@ export function AssetsTable() {
             table={table}
             showFilters={showFilters}
             filters={filterState}
+            filterBy={filterBy}
           />
         )}
 
@@ -214,6 +229,7 @@ export function AssetsTable() {
           open={openFiltersSheet}
           onOpenChange={setOpenFiltersSheet}
           filters={filterState}
+          filterBy={filterBy}
         />
 
         <div className="rounded-md">

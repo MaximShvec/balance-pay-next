@@ -9,10 +9,10 @@ import { AssetsTable } from "@/components/dashboard";
 
 export async function generateMetadata() {
   return generateMeta({
-    title: "CRM Admin Dashboard",
+    title: "Assets - CRM Admin Dashboard",
     description:
       "CRM admin dashboard template offers a streamlined and interactive interface for managing customer relationships, tracking sales, and analyzing performance metrics. Built with shadcn/ui, Tailwind CSS, Next.js.",
-    canonical: "/funds-connect"
+    canonical: "/assets"
   });
 }
 
@@ -27,7 +27,7 @@ export default async function Page() {
         <RecentTasks />
         <SalesPipeline />
       </div>
-      <AssetsTable filterBy="fiat" />
+      <AssetsTable filterBy="crypto" />
     </div>
   );
 }

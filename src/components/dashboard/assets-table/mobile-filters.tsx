@@ -22,12 +22,14 @@ type MobileFiltersProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   filters: AssetsFilterState;
+  filterBy?: "fiat" | "crypto";
 };
 
 export function AssetsMobileFilters({
   open,
   onOpenChange,
   filters,
+  filterBy,
 }: MobileFiltersProps) {
   const {
     hideZeroBalance,
@@ -61,7 +63,11 @@ export function AssetsMobileFilters({
         </SheetHeader>
         <Accordion
           type="multiple"
-          defaultValue={["hide-zero", "type", "currencies", "networks"]}
+          defaultValue={
+            filterBy
+              ? ["hide-zero", "currencies", "networks"]
+              : ["hide-zero", "type", "currencies", "networks"]
+          }
           className="w-full"
         >
           <AccordionItem value="hide-zero">
@@ -84,40 +90,42 @@ export function AssetsMobileFilters({
               </div>
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value="type">
-            <AccordionTrigger className="py-4">
-              Type
-              {currencyTypeFilter !== "all" && (
-                <Badge variant="secondary" className="mr-auto">
-                  1
-                </Badge>
-              )}
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-2">
-                {typeOptions.map((type) => (
-                  <div
-                    key={type.value}
-                    className="flex items-center space-x-3"
-                  >
-                    <Checkbox
-                      id={`sheet-type-${type.value}`}
-                      checked={currencyTypeFilter === type.value}
-                      onCheckedChange={(checked) =>
-                        checked && setCurrencyTypeFilter(type.value)
-                      }
-                    />
-                    <label
-                      htmlFor={`sheet-type-${type.value}`}
-                      className="cursor-pointer text-sm"
+          {!filterBy && (
+            <AccordionItem value="type">
+              <AccordionTrigger className="py-4">
+                Type
+                {currencyTypeFilter !== "all" && (
+                  <Badge variant="secondary" className="mr-auto">
+                    1
+                  </Badge>
+                )}
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-2">
+                  {typeOptions.map((type) => (
+                    <div
+                      key={type.value}
+                      className="flex items-center space-x-3"
                     >
-                      {type.label}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+                      <Checkbox
+                        id={`sheet-type-${type.value}`}
+                        checked={currencyTypeFilter === type.value}
+                        onCheckedChange={(checked) =>
+                          checked && setCurrencyTypeFilter(type.value)
+                        }
+                      />
+                      <label
+                        htmlFor={`sheet-type-${type.value}`}
+                        className="cursor-pointer text-sm"
+                      >
+                        {type.label}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          )}
           <AccordionItem value="currencies">
             <AccordionTrigger className="py-4">
               Currencies

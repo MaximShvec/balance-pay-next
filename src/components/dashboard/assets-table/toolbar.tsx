@@ -34,9 +34,10 @@ type ToolbarProps = {
   table: Table<Asset>;
   showFilters: boolean;
   filters: AssetsFilterState;
+  filterBy?: "fiat" | "crypto";
 };
 
-export function AssetsToolbar({ table, showFilters, filters }: ToolbarProps) {
+export function AssetsToolbar({ table, showFilters, filters, filterBy }: ToolbarProps) {
   const {
     hideZeroBalance,
     setHideZeroBalance,
@@ -92,26 +93,28 @@ export function AssetsToolbar({ table, showFilters, filters }: ToolbarProps) {
                   </label>
                 </div>
               </div>
-              <div className="order-3 w-full basis-full sm:order-0 sm:w-auto sm:basis-auto shrink-0">
-                <Select
-                  value={currencyTypeFilter}
-                  onValueChange={(v) =>
-                    setCurrencyTypeFilter(
-                      v as "all" | "crypto" | "stable" | "fiat",
-                    )
-                  }
-                >
-                  <SelectTrigger className="w-full sm:w-[140px] text-muted-foreground">
-                    <SelectValue placeholder="Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All</SelectItem>
-                    <SelectItem value="crypto">Crypto</SelectItem>
-                    <SelectItem value="stable">Stable</SelectItem>
-                    <SelectItem value="fiat">Fiat</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              {!filterBy && (
+                <div className="order-3 w-full basis-full sm:order-0 sm:w-auto sm:basis-auto shrink-0">
+                  <Select
+                    value={currencyTypeFilter}
+                    onValueChange={(v) =>
+                      setCurrencyTypeFilter(
+                        v as "all" | "crypto" | "stable" | "fiat",
+                      )
+                    }
+                  >
+                    <SelectTrigger className="w-full sm:w-[140px] text-muted-foreground">
+                      <SelectValue placeholder="Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All</SelectItem>
+                      <SelectItem value="crypto">Crypto</SelectItem>
+                      <SelectItem value="stable">Stable</SelectItem>
+                      <SelectItem value="fiat">Fiat</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
               <div className="order-2 flex min-w-0 w-full basis-full gap-2 sm:order-0 sm:w-auto sm:basis-auto">
                 <Popover>
                   <PopoverTrigger asChild>

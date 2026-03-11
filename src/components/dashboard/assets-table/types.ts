@@ -11,4 +11,5 @@ export type AssetsFilterState = {
   setSelectedNetworks: React.Dispatch<React.SetStateAction<Set<string>>>;
   uniqueCurrencies: { key: string; label: string }[];
   uniqueNetworks: string[];
+  filterBy?: "fiat" | "crypto";
 };
