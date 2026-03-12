@@ -13,10 +13,10 @@ import {
   AssetsIcon,
   TransactionsLinearIcon,
   TransactionsBoldIcon,
-  BuysellIcon,
+  CryptoLinearIcon,
+  CryptoBoldIcon,
   FundsconnectLinearIcon,
   FundsconnectBoldIcon,
-  AmlLinearIcon,
 } from "@/components/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -27,6 +27,12 @@ export const navItems = [
     href: "/",
     icon: WalletLinearIcon,
     iconActive: WalletBoldIcon,
+  },
+  {
+    title: "Buy & Sell",
+    href: "/buy-sell",
+    icon: CryptoLinearIcon,
+    iconActive: CryptoBoldIcon,
   },
   {
     title: "Funds",
