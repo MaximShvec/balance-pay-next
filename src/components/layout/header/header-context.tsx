@@ -89,7 +89,7 @@ export function HeaderTitleSlot() {
       <h1 className="text-foreground text-lg font-semibold lg:text-2xl shrink-0">
         {title}
       </h1>
-      <Badge variant="success">Verified</Badge>
+      <Badge variant="positive">Verified</Badge>
       {extra}
     </div>
   );

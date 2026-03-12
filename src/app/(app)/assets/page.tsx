@@ -2,7 +2,7 @@ import { generateMeta } from "@/lib/utils";
 import {
   AssetsStatCards,
   WalletBalanceCard,
-  LinkedMethods,
+  LinkedWallets,
   Operations,
 } from "@/components/assets";
 import { AssetsTable } from "@/components/dashboard";
@@ -25,7 +25,7 @@ export default async function Page() {
       <div className="grid gap-4 xl:grid-cols-3">
         <WalletBalanceCard />
         <Operations />
-        <LinkedMethods />
+        <LinkedWallets />
       </div>
       <AssetsTable filterBy="crypto-and-stable" />
     </div>

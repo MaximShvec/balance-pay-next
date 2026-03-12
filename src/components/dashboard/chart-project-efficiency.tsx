@@ -132,6 +132,7 @@ export function ChartProjectEfficiency() {
               nameKey="name"
               innerRadius={59}
               strokeWidth={5}
+              paddingAngle={3}
               activeIndex={activeIndex >= 0 ? activeIndex : undefined}
               activeShape={({
                 outerRadius = 0,

@@ -67,6 +67,7 @@ export function WalletBalanceCard() {
               nameKey="source"
               innerRadius={60}
               strokeWidth={5}
+              paddingAngle={3}
             >
               <Label
                 content={({ viewBox }) => {

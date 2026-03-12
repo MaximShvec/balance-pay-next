@@ -34,13 +34,13 @@ type LinkedMethod = {
 const linkedMethods: LinkedMethod[] = [
   {
     id: "1",
-    name: "EUR bank account",
+    name: "BA393385804800211234",
     bank: "Banking Circle",
     last4: "19",
   },
   {
     id: "2",
-    name: "USD bank account",
+    name: "BA39338500211234",
     bank: "Banking Circle",
     last4: "19",
   },

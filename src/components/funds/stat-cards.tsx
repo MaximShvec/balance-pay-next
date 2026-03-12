@@ -24,6 +24,7 @@ import {
   EuroIcon,
   RecieveIcon,
   SendIcon,
+  UnlockIcon,
 } from "@/components/icons";
 
 const menuItems = [
@@ -62,6 +63,7 @@ const detailCards = [
     change: "+20.1%",
     changeType: "positive" as const,
     icon: DollarIcon,
+    disabled: false,
   },
   {
     name: "Total EUR",
@@ -69,6 +71,7 @@ const detailCards = [
     change: "-0.8%",
     changeType: "negative" as const,
     icon: EuroIcon,
+    disabled: true,
   },
 ];
 
@@ -87,8 +90,8 @@ function TotalStatCardWithChart({
 }) {
   const gradientId = useId().replace(/:/g, "");
   const chartConfig = {
-    desktop: { label: "Crypto", color: "#009835" },
-    mobile: { label: "Fiat", color: "var(--chart-2)" },
+    desktop: { label: "Crypto", color: "#B3E5C9" },
+    mobile: { label: "Fiat", color: "#9CD1FB" },
   } satisfies ChartConfig;
 
   return (
@@ -97,7 +100,9 @@ function TotalStatCardWithChart({
         <div className="space-y-4">
           <div className="flex items-start justify-between">
             <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">{name}</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                {name}
+              </p>
               <p className="text-2xl xl:text-3xl font-semibold text-foreground">
                 {value}
               </p>
@@ -175,7 +180,10 @@ function TotalStatCardWithChart({
                   tickLine={false}
                   axisLine={false}
                 />
-                <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent />}
+                />
                 <Area
                   type="monotone"
                   dataKey="desktop"
@@ -216,6 +224,7 @@ function StatCard({
   changeType,
   icon: Icon,
   className,
+  disabled,
 }: {
   name: string;
   value: string;
@@ -223,9 +232,10 @@ function StatCard({
   changeType: "positive" | "negative";
   icon?: React.ElementType;
   className?: string;
+  disabled?: boolean;
 }) {
   return (
-    <Card className={cn("py-0", className)}>
+    <Card className={cn("py-0", disabled && "opacity-60", className)}>
       <CardContent className="p-6">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
@@ -269,12 +279,19 @@ function StatCard({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            {menuItems.map(({ label, icon: MenuIcon }) => (
-              <DropdownMenuItem key={label}>
-                <MenuIcon className="mr-2 size-4" />
-                {label}
+            {disabled ? (
+              <DropdownMenuItem>
+                <UnlockIcon className="mr-2 size-4" />
+                Activate IBAN
               </DropdownMenuItem>
-            ))}
+            ) : (
+              menuItems.map(({ label, icon: MenuIcon }) => (
+                <DropdownMenuItem key={label}>
+                  <MenuIcon className="mr-2 size-4" />
+                  {label}
+                </DropdownMenuItem>
+              ))
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </CardFooter>
@@ -300,6 +317,7 @@ export function FundsStatCards() {
           change={item.change}
           changeType={item.changeType}
           icon={item.icon}
+          disabled={item.disabled}
         />
       ))}
     </>

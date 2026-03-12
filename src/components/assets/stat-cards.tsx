@@ -30,11 +30,11 @@ import {
 } from "@/components/icons";
 
 const menuItems = [
-  { label: "Asset Page", icon: AssetIcon },
+  // { label: "Asset Page", icon: AssetIcon },
   { label: "Send", icon: SendIcon },
   { label: "Receive", icon: RecieveIcon },
   { label: "Move", icon: MoveIcon },
-  { label: "Buy & Sell", icon: BuyIcon },
+  // { label: "Buy & Sell", icon: BuyIcon },
 ];
 
 const chartData = [
@@ -74,7 +74,7 @@ const detailCards = [
     change: "+0.1%",
     changeType: "positive" as const,
     icon: UsdtIcon,
-    disabled: true,
+    disabled: false,
   },
 ];
 
@@ -93,8 +93,8 @@ function TotalStatCardWithChart({
 }) {
   const gradientId = useId().replace(/:/g, "");
   const chartConfig = {
-    desktop: { label: "Crypto", color: "#009835" },
-    mobile: { label: "Fiat", color: "var(--chart-2)" },
+    desktop: { label: "Crypto", color: "#FFD780" },
+    mobile: { label: "Fiat", color: "#B3E5C9" },
   } satisfies ChartConfig;
 
   return (
@@ -103,7 +103,9 @@ function TotalStatCardWithChart({
         <div className="space-y-4">
           <div className="flex items-start justify-between">
             <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">{name}</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                {name}
+              </p>
               <p className="text-2xl xl:text-3xl font-semibold text-foreground">
                 {value}
               </p>
@@ -181,7 +183,10 @@ function TotalStatCardWithChart({
                   tickLine={false}
                   axisLine={false}
                 />
-                <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent />}
+                />
                 <Area
                   type="monotone"
                   dataKey="desktop"
@@ -233,30 +238,28 @@ function StatCard({
   disabled?: boolean;
 }) {
   return (
-    <Card
-      className={cn(
-        "py-0",
-        disabled && "opacity-60",
-        className,
-      )}
-    >
+    <Card className={cn("py-0", disabled && "opacity-60", className)}>
       <CardContent className="p-6">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <p className="text-sm font-medium text-muted-foreground">{name}</p>
-            <p className="text-2xl xl:text-3xl font-semibold text-foreground">{value}</p>
+            <p className="text-2xl xl:text-3xl font-semibold text-foreground">
+              {value}
+            </p>
             <div className="flex items-center text-sm pt-1">
               <span
                 className={cn(
                   "font-medium",
                   changeType === "positive"
                     ? "text-emerald-600 dark:text-emerald-500"
-                    : "text-red-600 dark:text-red-500"
+                    : "text-red-600 dark:text-red-500",
                 )}
               >
                 {change}
               </span>
-              <span className="text-muted-foreground ml-1">from last month</span>
+              <span className="text-muted-foreground ml-1">
+                from last month
+              </span>
             </div>
           </div>
           {Icon && (

@@ -46,11 +46,11 @@ const linkedMethods: LinkedMethod[] = [
   },
 ];
 
-export function LinkedMethods() {
+export function LinkedWallets() {
   return (
     <Card className="h-full">
       <CardHeader className="items-center">
-        <CardTitle>Linked methods</CardTitle>
+        <CardTitle>Linked wallets</CardTitle>
         <CardAction>
           <Button
             variant="outline"
