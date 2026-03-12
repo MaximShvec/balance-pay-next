@@ -46,7 +46,7 @@ export function IbansBalanceCard() {
     <Card className="flex flex-col">
       <CardHeader className="gap-2">
         <CardTitle>IBANs</CardTitle>
-        <CardDescription>balance</CardDescription>
+        <CardDescription>Balance</CardDescription>
         <CardAction className="relative">
           <ExportButton className="absolute end-0 top-0" />
         </CardAction>

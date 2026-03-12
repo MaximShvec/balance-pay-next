@@ -1,5 +1,5 @@
 import type { Table } from "@tanstack/react-table";
-import { PlusCircle } from "lucide-react";
+import { ChevronDown, PlusCircle } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import type { Asset } from "@/types";
 import type { AssetsFilterState, AssetsTableFilterBy } from "./types";
@@ -10,13 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
@@ -42,8 +35,8 @@ export function AssetsToolbar({ table, showFilters, filters, filterBy }: Toolbar
   const {
     hideZeroBalance,
     setHideZeroBalance,
-    currencyTypeFilter,
-    setCurrencyTypeFilter,
+    selectedTypes,
+    setSelectedTypes,
     selectedCurrencies,
     setSelectedCurrencies,
     selectedNetworks,
@@ -96,26 +89,53 @@ export function AssetsToolbar({ table, showFilters, filters, filterBy }: Toolbar
               </div>
               {showTypeFilter(filterBy) && (
                 <div className="order-3 w-full basis-full sm:order-0 sm:w-auto sm:basis-auto shrink-0">
-                  <Select
-                    value={currencyTypeFilter}
-                    onValueChange={(v) =>
-                      setCurrencyTypeFilter(
-                        v as "all" | "crypto" | "stable" | "fiat",
-                      )
-                    }
-                  >
-                    <SelectTrigger className="w-full sm:w-[140px] text-muted-foreground">
-                      <SelectValue placeholder="Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All</SelectItem>
-                      <SelectItem value="crypto">Crypto</SelectItem>
-                      <SelectItem value="stable">Stable</SelectItem>
-                      {filterBy !== "crypto-and-stable" && (
-                        <SelectItem value="fiat">Fiat</SelectItem>
-                      )}
-                    </SelectContent>
-                  </Select>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full sm:w-[140px] justify-between text-muted-foreground"
+                      >
+                        <span className="flex items-center gap-1">
+                          Type
+                          {selectedTypes.size > 0 && (
+                            <Badge variant="secondary" className="ml-1">
+                              {selectedTypes.size}
+                            </Badge>
+                          )}
+                        </span>
+                        <ChevronDown className="size-3.5 shrink-0" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent align="start" className="w-44 p-2">
+                      <div className="space-y-1">
+                        {[
+                          { value: "crypto" as const, label: "Crypto" },
+                          { value: "stable" as const, label: "Stable" },
+                          ...(filterBy !== "crypto-and-stable"
+                            ? [{ value: "fiat" as const, label: "Fiat Wealth" }]
+                            : []),
+                        ].map(({ value, label }) => (
+                          <label
+                            key={value}
+                            className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent"
+                          >
+                            <Checkbox
+                              checked={selectedTypes.has(value)}
+                              onCheckedChange={(checked) => {
+                                setSelectedTypes((prev) => {
+                                  const next = new Set(prev);
+                                  if (checked) next.add(value);
+                                  else next.delete(value);
+                                  return next;
+                                });
+                              }}
+                            />
+                            {label}
+                          </label>
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               )}
               <div className="order-2 flex min-w-0 w-full basis-full gap-2 sm:order-0 sm:w-auto sm:basis-auto">

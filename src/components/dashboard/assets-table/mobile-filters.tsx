@@ -1,4 +1,4 @@
-import type { AssetsFilterState, AssetsTableFilterBy, CurrencyTypeFilter } from "./types";
+import type { AssetsFilterState, AssetsTableFilterBy } from "./types";
 import { showTypeFilter } from "./types";
 
 import { Button } from "@/components/ui/button";
@@ -35,8 +35,8 @@ export function AssetsMobileFilters({
   const {
     hideZeroBalance,
     setHideZeroBalance,
-    currencyTypeFilter,
-    setCurrencyTypeFilter,
+    selectedTypes,
+    setSelectedTypes,
     selectedCurrencies,
     setSelectedCurrencies,
     selectedNetworks,
@@ -45,12 +45,11 @@ export function AssetsMobileFilters({
     uniqueNetworks,
   } = filters;
 
-  const typeOptions: { value: CurrencyTypeFilter; label: string }[] = [
-    { value: "all", label: "All" },
+  const typeOptions: { value: "crypto" | "stable" | "fiat"; label: string }[] = [
     { value: "crypto", label: "Crypto" },
     { value: "stable", label: "Stable" },
   ];
-  if (filterBy !== "crypto-and-stable") typeOptions.push({ value: "fiat", label: "Fiat" });
+  if (filterBy !== "crypto-and-stable") typeOptions.push({ value: "fiat", label: "Fiat Wealth" });
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -95,9 +94,9 @@ export function AssetsMobileFilters({
             <AccordionItem value="type">
               <AccordionTrigger className="py-4">
                 Type
-                {currencyTypeFilter !== "all" && (
+                {selectedTypes.size > 0 && (
                   <Badge variant="secondary" className="mr-auto">
-                    1
+                    {selectedTypes.size}
                   </Badge>
                 )}
               </AccordionTrigger>
@@ -110,10 +109,15 @@ export function AssetsMobileFilters({
                     >
                       <Checkbox
                         id={`sheet-type-${type.value}`}
-                        checked={currencyTypeFilter === type.value}
-                        onCheckedChange={(checked) =>
-                          checked && setCurrencyTypeFilter(type.value)
-                        }
+                        checked={selectedTypes.has(type.value)}
+                        onCheckedChange={(checked) => {
+                          setSelectedTypes((prev) => {
+                            const next = new Set(prev);
+                            if (checked) next.add(type.value);
+                            else next.delete(type.value);
+                            return next;
+                          });
+                        }}
                       />
                       <label
                         htmlFor={`sheet-type-${type.value}`}
@@ -208,7 +212,9 @@ export function AssetsMobileFilters({
             variant="outline"
             className="w-full"
             onClick={() => {
-              setCurrencyTypeFilter("all");
+              setSelectedTypes(
+                new Set(filterBy === "crypto-and-stable" ? ["crypto", "stable"] : ["crypto", "stable", "fiat"]),
+              );
               setHideZeroBalance(false);
               setSelectedCurrencies(new Set());
               setSelectedNetworks(new Set());

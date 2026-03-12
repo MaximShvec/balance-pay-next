@@ -94,7 +94,7 @@ function TotalStatCardWithChart({
   const gradientId = useId().replace(/:/g, "");
   const chartConfig = {
     desktop: { label: "Crypto", color: "#FFD780" },
-    mobile: { label: "Fiat", color: "#B3E5C9" },
+    mobile: { label: "Stable", color: "#B3E5C9" },
   } satisfies ChartConfig;
 
   return (

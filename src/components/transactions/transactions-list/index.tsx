@@ -144,7 +144,7 @@ export function TransactionsList({ data }: { data: Transaction[] }) {
   };
 
   return (
-    <Card className="border-none py-0 gap-4">
+    <Card className="border-none py-0 gap-4 dark:bg-transparent">
       <CardHeader className="flex flex-row items-center justify-between gap-2 px-0">
         <CardTitle>Transactions</CardTitle>
         <CardAction className="relative flex items-center gap-2">

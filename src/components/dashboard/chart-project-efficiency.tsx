@@ -170,8 +170,8 @@ export function ChartProjectEfficiency() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="font-bold"
-                          style={{ fill: "#6C737F", fontSize: "1.4em" }}
+                          className="font-bold fill-foreground"
+                          style={{ fontSize: "1.4em" }}
                         >
                           $
                           {displayValue.toLocaleString("en-US", {
@@ -205,7 +205,7 @@ export function ChartProjectEfficiency() {
             return (
               <div
                 key={key}
-                className="bg-[var(--base-200)] flex items-center gap-2 rounded-full p-4"
+                className="bg-[var(--base-200)] dark:bg-[var(--base-800)] flex items-center gap-2 rounded-full p-4"
               >
                 <span
                   className="size-2 shrink-0 rounded-full"

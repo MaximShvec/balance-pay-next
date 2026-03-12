@@ -148,3 +148,9 @@
   [data-slot="switch-thumb"] {
   background-color: black !important;
 }
+
+/* Sidebar: активный пункт меню — иконка белая в тёмной теме */
+.dark [data-slot="sidebar-menu-button"][data-active="true"] svg,
+.dark [data-slot="sidebar-menu-button"][data-active="true"] svg path {
+  fill: white !important;
+}

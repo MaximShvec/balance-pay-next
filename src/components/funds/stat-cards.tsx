@@ -90,12 +90,17 @@ function TotalStatCardWithChart({
 }) {
   const gradientId = useId().replace(/:/g, "");
   const chartConfig = {
-    desktop: { label: "Crypto", color: "#B3E5C9" },
-    mobile: { label: "Fiat", color: "#9CD1FB" },
+    desktop: { label: "USD", color: "#B3E5C9" },
+    mobile: { label: "EUR", color: "#9CD1FB" },
   } satisfies ChartConfig;
 
   return (
-    <Card className={cn("py-0", className)}>
+    <Card
+      className={cn(
+        "py-0 bg-[var(--base-200)] dark:bg-[var(--base-800)]",
+        className,
+      )}
+    >
       <CardContent className="p-6">
         <div className="space-y-4">
           <div className="flex items-start justify-between">

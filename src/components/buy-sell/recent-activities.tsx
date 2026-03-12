@@ -200,9 +200,7 @@ export function RecentActivities() {
   const filteredActivities = React.useMemo(() => {
     let result = activities;
     if (hideZeroBalance) {
-      result = result.filter(
-        (a) => a.amount !== 0 && a.valueUSD !== 0,
-      );
+      result = result.filter((a) => a.amount !== 0 && a.valueUSD !== 0);
     }
     if (!search.trim()) return result;
     const q = search.trim().toLowerCase();
@@ -236,7 +234,7 @@ export function RecentActivities() {
           </label>
         </CardAction>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 flex-1 min-h-0 overflow-hidden">
+      <CardContent className="flex flex-col gap-4 flex-1 min-h-0 overflow-hidden pt-2">
         <Input
           placeholder="Search activities..."
           value={search}

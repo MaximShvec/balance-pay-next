@@ -21,7 +21,7 @@ import { CardExportButton as ExportButton } from "@/components/cards/card-action
 
 const chartData = [
   { source: "crypto", value: 25582, fill: "#FFD780" },
-  { source: "fiat", value: 1235, fill: "#B3E5C9" },
+  { source: "stable", value: 1235, fill: "#B3E5C9" },
 ];
 
 const chartConfig = {
@@ -29,8 +29,8 @@ const chartConfig = {
     label: "Crypto",
     color: "#FFD780",
   },
-  fiat: {
-    label: "Fiat",
+  stable: {
+    label: "Stable",
     color: "#B3E5C9",
   },
 } satisfies ChartConfig;
@@ -46,7 +46,7 @@ export function WalletBalanceCard() {
     <Card className="flex flex-col">
       <CardHeader className="gap-2">
         <CardTitle>Wallet</CardTitle>
-        <CardDescription>balance</CardDescription>
+        <CardDescription>Balance</CardDescription>
         <CardAction className="relative">
           <ExportButton className="absolute end-0 top-0" />
         </CardAction>

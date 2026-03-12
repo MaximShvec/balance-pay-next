@@ -11,6 +11,7 @@ import {
   WalletLinearIcon,
   WalletBoldIcon,
   AssetsIcon,
+  CardIcon,
   TransactionsLinearIcon,
   TransactionsBoldIcon,
   CryptoLinearIcon,
@@ -29,12 +30,6 @@ export const navItems = [
     iconActive: WalletBoldIcon,
   },
   {
-    title: "Buy & Sell",
-    href: "/buy-sell",
-    icon: CryptoLinearIcon,
-    iconActive: CryptoBoldIcon,
-  },
-  {
     title: "Funds",
     href: "/funds",
     icon: FundsconnectLinearIcon,
@@ -47,10 +42,22 @@ export const navItems = [
     iconActive: AssetsIcon,
   },
   {
+    title: "Buy & Sell",
+    href: "/buy-sell",
+    icon: CryptoLinearIcon,
+    iconActive: CryptoBoldIcon,
+  },
+  {
     title: "Transactions",
     href: "/transactions",
     icon: TransactionsLinearIcon,
     iconActive: TransactionsBoldIcon,
+  },
+  {
+    title: "Cards",
+    href: "/cards",
+    icon: CardIcon,
+    iconActive: CardIcon,
   },
 ];
 
