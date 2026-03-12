@@ -3,7 +3,14 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardAction,
+} from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
@@ -24,8 +31,8 @@ const activities = [
     icon: "/images/crypto-icons/ethereum.svg",
     short_name: "ETH",
     date: "Nov 28, 2024 11:34 PM",
-    amount: 0.5384,
-    valueUSD: 3980.93,
+    amount: 0,
+    valueUSD: 0,
   },
   {
     type: "Sell",
@@ -42,8 +49,8 @@ const activities = [
     icon: "/images/crypto-icons/tether.svg",
     short_name: "USDT",
     date: "Nov 12, 2024 11:34 PM",
-    amount: 0.5384,
-    valueUSD: 3980.93,
+    amount: 0,
+    valueUSD: 0,
   },
   {
     type: "Sell",
@@ -60,8 +67,8 @@ const activities = [
     icon: "/images/crypto-icons/avalanche.svg",
     short_name: "AVAX",
     date: "Nov 12, 2019 11:34 PM",
-    amount: 0.5384,
-    valueUSD: 3980.93,
+    amount: 0,
+    valueUSD: 0,
   },
   {
     type: "Buy",
@@ -132,8 +139,8 @@ const activities = [
     icon: "/images/crypto-icons/toncoin.svg",
     short_name: "TON",
     date: "Nov 06, 2024 09:45 AM",
-    amount: 50,
-    valueUSD: 312.5,
+    amount: 0,
+    valueUSD: 0,
   },
   {
     type: "Sell",
@@ -188,11 +195,18 @@ function getBadgeVariant(type: string) {
 
 export function RecentActivities() {
   const [search, setSearch] = React.useState("");
+  const [hideZeroBalance, setHideZeroBalance] = React.useState(true);
 
   const filteredActivities = React.useMemo(() => {
-    if (!search.trim()) return activities;
+    let result = activities;
+    if (hideZeroBalance) {
+      result = result.filter(
+        (a) => a.amount !== 0 && a.valueUSD !== 0,
+      );
+    }
+    if (!search.trim()) return result;
     const q = search.trim().toLowerCase();
-    return activities.filter((activity) => {
+    return result.filter((activity) => {
       const nameMatch = activity.name.toLowerCase().includes(q);
       const amountMatch = String(activity.amount).includes(q);
       const valueMatch = String(activity.valueUSD).includes(q);
@@ -202,19 +216,32 @@ export function RecentActivities() {
         nameMatch || amountMatch || valueMatch || typeMatch || shortNameMatch
       );
     });
-  }, [search]);
+  }, [search, hideZeroBalance]);
 
   return (
-    <Card className="h-full flex flex-col min-h-0">
-      <CardHeader>
+    <Card className="h-full flex flex-col min-h-0 overflow-hidden">
+      <CardHeader className="shrink-0">
         <CardTitle>Recent Activities</CardTitle>
+        <CardAction className="flex items-center gap-2">
+          <Switch
+            id="recent-hide-zero"
+            checked={hideZeroBalance}
+            onCheckedChange={setHideZeroBalance}
+          />
+          <label
+            htmlFor="recent-hide-zero"
+            className="text-muted-foreground cursor-pointer text-sm"
+          >
+            Hide zero balance
+          </label>
+        </CardAction>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 flex-1 min-h-0">
+      <CardContent className="flex flex-col gap-4 flex-1 min-h-0 overflow-hidden">
         <Input
           placeholder="Search activities..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="min-w-[120px] w-full"
+          className="min-w-[120px] w-full shrink-0"
         />
         <div className="overflow-y-auto flex-1 min-h-0 space-y-6 pr-1">
           {filteredActivities.map((activity, key) => (

@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -16,56 +22,157 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MoveIcon } from "@/components/icons";
 
-const coins = [
-  { name: "Bitcoin", short_name: "BTC", icon: "bitcoin" },
-  { name: "Avalanche", short_name: "AVAX", icon: "avalanche" },
-  { name: "Ethereum", short_name: "ETH", icon: "ethereum" },
-  { name: "Solana", short_name: "SOL", icon: "solana" },
-  { name: "Tether", short_name: "USDT", icon: "tether" },
-  { name: "XRP", short_name: "XRP", icon: "xrp" },
-  { name: "Dogecoin", short_name: "DOGE", icon: "dogecoin" },
+type AssetItem = { id: string; name: string; shortName: string; icon: string };
+
+const cryptoAssets: AssetItem[] = [
+  {
+    id: "BTC",
+    name: "Bitcoin",
+    shortName: "BTC",
+    icon: "/images/crypto-icons/bitcoin.svg",
+  },
+  {
+    id: "ETH",
+    name: "Ethereum",
+    shortName: "ETH",
+    icon: "/images/crypto-icons/ethereum.svg",
+  },
+  {
+    id: "SOL",
+    name: "Solana",
+    shortName: "SOL",
+    icon: "/images/crypto-icons/solana.svg",
+  },
+  {
+    id: "AVAX",
+    name: "Avalanche",
+    shortName: "AVAX",
+    icon: "/images/crypto-icons/avalanche.svg",
+  },
+  {
+    id: "XRP",
+    name: "XRP",
+    shortName: "XRP",
+    icon: "/images/crypto-icons/xrp.svg",
+  },
+  {
+    id: "DOGE",
+    name: "Dogecoin",
+    shortName: "DOGE",
+    icon: "/images/crypto-icons/dogecoin.svg",
+  },
+  {
+    id: "USDT",
+    name: "Tether",
+    shortName: "USDT",
+    icon: "/images/crypto-icons/tether.svg",
+  },
+  {
+    id: "USDC",
+    name: "USD Coin",
+    shortName: "USDC",
+    icon: "/images/crypto-icons/usd-coin.svg",
+  },
+];
+
+const fiatAssets: AssetItem[] = [
+  {
+    id: "USD",
+    name: "US Dollar",
+    shortName: "USD",
+    icon: "/images/currencies/USD.svg",
+  },
+  {
+    id: "EUR",
+    name: "Euro",
+    shortName: "EUR",
+    icon: "/images/currencies/EUR.svg",
+  },
 ];
 
 const mockBalances: Record<string, string> = {
-  Bitcoin: "0.5234",
-  Avalanche: "125.5",
-  Ethereum: "2.8",
-  Solana: "450",
-  Tether: "880000",
+  BTC: "0.5234",
+  ETH: "2.8",
+  SOL: "450",
+  AVAX: "125.5",
   XRP: "15000",
-  Dogecoin: "25000",
+  DOGE: "25000",
+  USDT: "880000",
+  USDC: "1200",
+  USD: "15000",
+  EUR: "0",
 };
+
+const mockRatesUsd: Record<string, number> = {
+  BTC: 70000,
+  ETH: 3500,
+  SOL: 200,
+  AVAX: 35,
+  XRP: 0.52,
+  DOGE: 0.08,
+  USDT: 1,
+  USDC: 1,
+  USD: 1,
+  EUR: 1.08,
+};
+
+function convertAmount(fromId: string, toId: string, amount: number): number {
+  const rateFrom = mockRatesUsd[fromId] ?? 1;
+  const rateTo = mockRatesUsd[toId] ?? 1;
+  return (amount * rateFrom) / rateTo;
+}
+
+function formatAmount(value: number, assetId: string): string {
+  const rate = mockRatesUsd[assetId] ?? 1;
+  if (value >= 1000 || (rate >= 1 && value >= 1)) {
+    return value.toLocaleString("en-US", {
+      maximumFractionDigits: 2,
+      minimumFractionDigits: 0,
+    });
+  }
+  if (value < 0.0001 && value > 0) return value.toFixed(8);
+  if (value < 1) return value.toFixed(6);
+  return value.toFixed(2);
+}
 
 function formatBalance(value: string): string {
   const num = parseFloat(value.replace(/,/g, ""));
   if (isNaN(num)) return value;
-  return num >= 1000 ? num.toLocaleString("en-US", { maximumFractionDigits: 0 }) : value;
+  return num >= 1000
+    ? num.toLocaleString("en-US", { maximumFractionDigits: 0 })
+    : value;
 }
 
 function CoinBlock({
   label,
   value,
+  options,
   onValueChange,
   amount,
   onAmountChange,
   showMax,
+  amountReadOnly,
 }: {
   label: string;
   value: string;
+  options: AssetItem[];
   onValueChange: (v: string) => void;
   amount: string;
   onAmountChange: (v: string) => void;
   showMax?: boolean;
+  amountReadOnly?: boolean;
 }) {
-  const coin = coins.find((c) => c.name === value);
-  const balance = coin ? mockBalances[coin.name] ?? "0" : "0";
+  const asset = options.find((a) => a.id === value) ?? options[0];
+  const balance = mockBalances[asset.id] ?? "0";
   const placeholder = `0.01 - ${formatBalance(balance)}`;
 
   return (
     <div className="rounded-xl border bg-card p-4 flex flex-col gap-4">
       <div className="flex justify-between items-center text-sm text-muted-foreground">
         <span>{label}</span>
-        <span>Доступный баланс -- {coin?.short_name}</span>
+        <span>
+          Доступный баланс: {balance === "0" ? "0" : formatBalance(balance)}
+        </span>
       </div>
       <div className="flex justify-between items-center gap-4">
         <Select value={value} onValueChange={onValueChange}>
@@ -76,39 +183,40 @@ function CoinBlock({
                   width={24}
                   height={24}
                   className="size-6"
-                  src={`/images/crypto-icons/${coin?.icon}.svg`}
+                  src={asset.icon}
                   unoptimized
                   alt=""
                 />
-                {coin?.short_name}
+                {asset.shortName}
               </div>
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            {coins.map((c) => (
-              <SelectItem key={c.name} value={c.name}>
+            {options.map((a) => (
+              <SelectItem key={a.id} value={a.id}>
                 <div className="flex items-center gap-2">
                   <Image
                     width={20}
                     height={20}
                     className="size-5"
-                    src={`/images/crypto-icons/${c.icon}.svg`}
+                    src={a.icon}
                     unoptimized
                     alt=""
                   />
-                  {c.name}/{c.short_name}
+                  {a.name}/{a.shortName}
                 </div>
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        
+
         <div className="flex flex-col items-end gap-1 flex-1 min-w-0">
-          <Input 
+          <Input
             value={amount}
             onChange={(e) => onAmountChange(e.target.value)}
-            className="text-right text-lg w-1/2 min-w-[120px]" 
-            placeholder={placeholder} 
+            readOnly={amountReadOnly}
+            className="text-right text-lg w-1/2 min-w-[120px]"
+            placeholder={placeholder}
           />
           {showMax && (
             <Button
@@ -127,59 +235,115 @@ function CoinBlock({
   );
 }
 
-export function TradingCard() {
-  const [selectedBuyCoin, setSelectedBuyCoin] = useState<string>(coins[0].name);
-  const [selectedSellCoin, setSelectedSellCoin] = useState<string>(coins[1].name);
-  const [buyAmount, setBuyAmount] = useState<string>("");
-  const [sellAmount, setSellAmount] = useState<string>("");
+type TradingCardProps = {
+  onAssetChange?: (topAssetId: string, bottomAssetId: string) => void;
+};
 
-  const selectsContent = (
+export function TradingCard({ onAssetChange }: TradingCardProps) {
+  const [activeTab, setActiveTab] = useState("exchange");
+
+  const [topAssetId, setTopAssetId] = useState<string>(cryptoAssets[0].id);
+  const [bottomAssetId, setBottomAssetId] = useState<string>(fiatAssets[0].id);
+  const [topAmount, setTopAmount] = useState<string>("");
+
+  const isExchange = activeTab === "exchange";
+  const [topIsCrypto, setTopIsCrypto] = useState(true);
+
+  const topOptions = isExchange
+    ? topIsCrypto
+      ? cryptoAssets
+      : fiatAssets
+    : cryptoAssets;
+  const bottomOptions = isExchange
+    ? topIsCrypto
+      ? fiatAssets
+      : cryptoAssets
+    : cryptoAssets;
+
+  const topValue = topAssetId;
+  const bottomValue = bottomAssetId;
+
+  useEffect(() => {
+    onAssetChange?.(topAssetId, bottomAssetId);
+  }, [topAssetId, bottomAssetId, onAssetChange]);
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    setTopAmount("");
+    if (tab === "exchange") {
+      setTopIsCrypto(true);
+      setTopAssetId(cryptoAssets[0].id);
+      setBottomAssetId(fiatAssets[0].id);
+    } else {
+      setTopAssetId(cryptoAssets[0].id);
+      setBottomAssetId(cryptoAssets[1].id);
+    }
+  };
+
+  const handleTopAssetChange = (id: string) => {
+    if (id !== topAssetId) setTopAmount("");
+    setTopAssetId(id);
+  };
+
+  const handleBottomAssetChange = (id: string) => {
+    if (id !== bottomAssetId) setTopAmount("");
+    setBottomAssetId(id);
+  };
+
+  const bottomAmount = useMemo(() => {
+    const num = parseFloat(topAmount.replace(/,/g, "").replace(/\s/g, ""));
+    if (!topAmount.trim() || isNaN(num) || num <= 0) return "";
+    const converted = convertAmount(topAssetId, bottomAssetId, num);
+    return formatAmount(converted, bottomAssetId);
+  }, [topAmount, topAssetId, bottomAssetId]);
+
+  const handleSwap = () => {
+    if (isExchange) {
+      setTopIsCrypto((prev) => !prev);
+    }
+    setTopAssetId(bottomAssetId);
+    setBottomAssetId(topAssetId);
+    setTopAmount(bottomAmount);
+  };
+
+  const exchangeContent = (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2 relative">
         <CoinBlock
-          label="Buy"
-          value={selectedBuyCoin}
-          onValueChange={setSelectedBuyCoin}
-          amount={buyAmount}
-          onAmountChange={setBuyAmount}
+          label="Sell"
+          value={topValue}
+          options={topOptions}
+          onValueChange={handleTopAssetChange}
+          amount={topAmount}
+          onAmountChange={setTopAmount}
           showMax
         />
-        
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+
+        <div className="mx-auto -my-5 z-10">
           <Button
             type="button"
             variant="outline"
             size="icon"
             className="rounded-full bg-background border-border shadow-sm h-8 w-8"
             aria-label="Swap"
-            onClick={() => {
-              const tempCoin = selectedSellCoin;
-              setSelectedSellCoin(selectedBuyCoin);
-              setSelectedBuyCoin(tempCoin);
-              
-              const tempAmount = sellAmount;
-              setSellAmount(buyAmount);
-              setBuyAmount(tempAmount);
-            }}
+            onClick={handleSwap}
           >
             <MoveIcon className="size-4 rotate-90" />
           </Button>
         </div>
 
         <CoinBlock
-          label="Sell"
-          value={selectedSellCoin}
-          onValueChange={setSelectedSellCoin}
-          amount={sellAmount}
-          onAmountChange={setSellAmount}
+          label="Buy"
+          value={bottomValue}
+          options={bottomOptions}
+          onValueChange={handleBottomAssetChange}
+          amount={bottomAmount}
+          onAmountChange={() => {}}
+          amountReadOnly
         />
       </div>
-      
-      <Button
-        className="w-full"
-        size="lg"
-        disabled={!buyAmount.trim() || !sellAmount.trim()}
-      >
+
+      <Button className="w-full" size="lg" disabled={!topAmount.trim()}>
         Введите сумму
       </Button>
     </div>
@@ -188,11 +352,11 @@ export function TradingCard() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardDescription>Trading</CardDescription>
+        <CardDescription>Available Balance</CardDescription>
         <CardTitle className="font-display text-3xl">$46,200</CardTitle>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="exchange">
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList className="mb-4 w-full">
             <TabsTrigger className="w-full" value="exchange">
               Exchange
@@ -202,10 +366,10 @@ export function TradingCard() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="exchange" className="space-y-6">
-            {selectsContent}
+            {exchangeContent}
           </TabsContent>
           <TabsContent value="convert" className="space-y-6">
-            {selectsContent}
+            {exchangeContent}
           </TabsContent>
         </Tabs>
       </CardContent>
