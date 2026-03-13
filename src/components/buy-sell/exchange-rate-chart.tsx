@@ -125,8 +125,8 @@ export function ExchangeRateChart({
   const gridCols = chartData.length;
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="h-full flex flex-col min-h-0">
+      <CardHeader className="shrink-0">
         <CardDescription className="relative">
           {baseAssetId} / {quoteAssetId}
         </CardDescription>
@@ -171,7 +171,7 @@ export function ExchangeRateChart({
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="mt-auto">
+      <CardContent className="mt-auto flex-1 min-h-0 flex flex-col justify-end">
         <div className="w-full">
           <ChartContainer
             className="mt-0 !aspect-21/9 w-full md:mt-6"

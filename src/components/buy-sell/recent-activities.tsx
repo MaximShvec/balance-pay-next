@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "@/lib/utils";
 
 import {
   Card,
@@ -11,7 +10,6 @@ import {
   CardAction,
 } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 
@@ -180,19 +178,6 @@ const activities = [
   },
 ];
 
-function getBadgeVariant(type: string) {
-  switch (type) {
-    case "Send":
-      return "positive";
-    case "Buy":
-      return "warning";
-    case "Sell":
-      return "info";
-    default:
-      return "secondary";
-  }
-}
-
 export function RecentActivities() {
   const [search, setSearch] = React.useState("");
   const [hideZeroBalance, setHideZeroBalance] = React.useState(true);
@@ -253,16 +238,8 @@ export function RecentActivities() {
                 unoptimized
               />
               <div className="ml-4 space-y-1 min-w-0">
-                <p className="flex items-center gap-2 text-sm leading-none font-medium">
-                  {activity.name}
-                  <Badge
-                    variant={getBadgeVariant(activity.type)}
-                    className={cn(activity.type === "Sell" && "border-0")}
-                  >
-                    {activity.type}
-                  </Badge>
-                </p>
-                <p className="text-muted-foreground text-sm">{activity.date}</p>
+                <p className="text-sm leading-none font-medium">{activity.name}</p>
+                <p className="text-muted-foreground text-sm">{activity.short_name}</p>
               </div>
               <div className="ml-auto flex flex-col text-end shrink-0">
                 <span>{activity.valueUSD} USD</span>

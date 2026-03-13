@@ -1,6 +1,7 @@
 "use client";
 
 import { PanelLeftIcon } from "lucide-react";
+import Link from "next/link";
 
 import { Separator } from "@/components/ui/separator";
 import Notifications from "@/components/layout/header/notifications";
@@ -9,6 +10,7 @@ import UserMenu from "@/components/layout/header/user-menu";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
 import { HeaderTitleSlot } from "@/components/layout/header/header-context";
+import { MessageIcon } from "@/components/icons";
 
 export { useHeader } from "@/components/layout/header/header-context";
 
@@ -36,6 +38,16 @@ export function SiteHeader() {
 
         <div className="ml-auto flex items-center gap-2">
           <Search />
+          <Button
+            size="icon"
+            variant="ghost"
+            className="relative size-12 rounded-full bg-muted/50 hover:bg-muted focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            asChild
+          >
+            <Link href="/helpcenter" aria-label="Help Center">
+              <MessageIcon className="size-5 text-muted-foreground" />
+            </Link>
+          </Button>
           <Notifications />
           <Separator
             orientation="vertical"

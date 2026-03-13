@@ -8,15 +8,29 @@ export function BuySellContent() {
   const [bottomAssetId, setBottomAssetId] = useState("USD");
 
   return (
-    <div className="grid gap-4 md:h-[calc(var(--content-full-height)-var(--spacing)*8)] xl:h-[calc(var(--content-full-height)-var(--spacing)*16)] md:min-h-0 md:grid-cols-3 md:[&>*]:min-h-0">
+    <div className="grid gap-4 md:grid-cols-3 items-start md:items-stretch">
       <TradingCard 
         onAssetChange={(top, bottom) => {
           setTopAssetId(top);
           setBottomAssetId(bottom);
         }} 
       />
-      <ExchangeRateChart baseAssetId={topAssetId} quoteAssetId={bottomAssetId} />
-      <RecentActivities />
+      <div className="relative hidden md:block">
+        <div className="absolute inset-0">
+          <ExchangeRateChart baseAssetId={topAssetId} quoteAssetId={bottomAssetId} />
+        </div>
+      </div>
+      <div className="relative hidden md:block">
+        <div className="absolute inset-0">
+          <RecentActivities />
+        </div>
+      </div>
+      <div className="md:hidden">
+        <ExchangeRateChart baseAssetId={topAssetId} quoteAssetId={bottomAssetId} />
+      </div>
+      <div className="md:hidden">
+        <RecentActivities />
+      </div>
     </div>
   );
 }
