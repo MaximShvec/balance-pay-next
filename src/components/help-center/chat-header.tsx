@@ -15,7 +15,12 @@ import { CallDialog } from "@/components/help-center/call-dialog";
 import { VideoCallDialog } from "@/components/help-center/video-call-dialog";
 import { ChatUserDropdown } from "@/components/help-center/chat-list-item-dropdown";
 import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn, generateAvatarFallback } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+
+function getInitials(name?: string) {
+  if (!name) return "";
+  return name.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2);
+}
 import { UserPropsTypes } from "@/components/help-center/types";
 
 export function ChatHeader({ user }: { user: UserPropsTypes }) {
@@ -41,7 +46,7 @@ export function ChatHeader({ user }: { user: UserPropsTypes }) {
               "bg-red-500": user?.online_status === "danger",
             })}
           />
-          <AvatarFallback>{generateAvatarFallback(user?.name)}</AvatarFallback>
+          <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col gap-1">
           <span className="text-sm font-semibold">{user.name}</span>

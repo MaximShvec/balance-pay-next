@@ -1,4 +1,9 @@
-import { cn, generateAvatarFallback } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+
+function getInitials(name?: string) {
+  if (!name) return "";
+  return name.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2);
+}
 import useChatStore from "@/components/help-center/use-chat-store";
 import { ChatItemProps } from "@/components/help-center/types";
 import { Ellipsis } from "lucide-react";
@@ -40,7 +45,7 @@ export function ChatListItem({
             "bg-red-500": chat.user?.online_status === "danger",
           })}
         />
-        <AvatarFallback>{generateAvatarFallback(chat.user?.name)}</AvatarFallback>
+        <AvatarFallback>{getInitials(chat.user?.name)}</AvatarFallback>
       </Avatar>
       <div className="min-w-0 grow">
         <div className="flex items-center justify-between">

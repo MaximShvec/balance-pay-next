@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { generateAvatarFallback } from "@/lib/utils";
+function getInitials(name?: string) {
+  if (!name) return "";
+  return name.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2);
+}
 import { Dribbble, Facebook, FileText, Instagram, Linkedin, SheetIcon, X } from "lucide-react";
 import useChatStore from "@/components/help-center/use-chat-store";
 import { UserPropsTypes } from "@/components/help-center/types";
@@ -25,7 +28,7 @@ export function UserDetailSheet({ user }: { user: UserPropsTypes }) {
           <div className="my-4 flex flex-col items-center justify-end">
             <Avatar className="mb-4 size-32">
               <AvatarImage src={user.avatar} alt="avatar image" />
-              <AvatarFallback>{generateAvatarFallback(user.name)}</AvatarFallback>
+              <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
             <h4 className="mb-2 text-xl font-semibold">{user.name}</h4>
             <div className="text-xs">
